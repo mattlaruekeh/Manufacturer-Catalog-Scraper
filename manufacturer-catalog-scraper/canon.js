@@ -1,6 +1,7 @@
 /* 
     Load in common functions and variables
 */
+const { text } = require('cheerio/lib/api/manipulation');
 const COMMON = require('./common');
 const puppeteer = COMMON.puppeteer
 const cheerio = COMMON.cheerio
@@ -9,11 +10,11 @@ const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
 
 const self = {
+    dataSource: 'Canon',
     productLinks: [],
     browser: null,
     page: null,
     content: null,
-    $: null,
     url: 'https://shop.usa.canon.com/shop/en/catalog/cameras/eos-dslr-and-mirrorless-interchangeable-lens-cameras',
     
 
@@ -52,21 +53,30 @@ const self = {
     initPuppeteer: async() => {
         console.log("Initializing Puppeteer")
 
-        self.browser = await puppeteer.launch({
-            headless: false,
-        });
-        self.page = await self.browser.newPage();
-    
-        //turns request interceptor on
-        await self.page.setRequestInterception(true);
-    
-        //if the page makes a  request to a resource type of image or stylesheet then abort that request
-        self.page.on('request', request => {
-            if (request.resourceType() === 'image' || request.resourceType() === 'stylesheet')
-                request.abort();
-            else
-                request.continue();
-        });
+        return new Promise(async (resolve, reject) => { 
+            self.browser = await puppeteer.launch({
+                headless: false,
+            });
+            self.page = await self.browser.newPage();
+        
+            //turns request interceptor on
+            await self.page.setRequestInterception(true);
+        
+            //if the page makes a  request to a resource type of image or stylesheet then abort that request
+            self.page.on('request', request => {
+                if (request.resourceType() === 'image' || request.resourceType() === 'stylesheet')
+                    request.abort();
+                else
+                    request.continue();
+            });
+
+            if (self.page) { 
+                return resolve(self.page)
+            } else { 
+                return reject('Could not load page')
+            }
+        })
+        
     },
 
     /* 
@@ -79,17 +89,18 @@ const self = {
             try { 
                 await self.initPuppeteer() 
                 console.log(self.productLinks[0].all_links)
-                let url = 'https://shop.usa.canon.com' + self.productLinks[0].all_links[0]
-                console.log(`Going to url ${url}`)
+                let goTo = 'https://shop.usa.canon.com' + self.productLinks[0].all_links[0]
+                console.log(`Going to url ${goTo}`)
                 // make sure browser is initialized 
                 if (self.browser) { 
                     // open up the page
-                    await self.page.goto(url, {waitUntil: 'domcontentloaded', timeout: 0});
+                    await self.page.goto(goTo, {waitUntil: 'domcontentloaded', timeout: 0});
                     
                     // grab the html source
                     self.content = await self.page.content();
-                    self.$ = cheerio.load(self.content);
-                    let html = self.$.html()
+                    let $ = cheerio.load(self.content);
+                    let html = $.html()
+                    let url = self.page.url()
                     console.log("Got the html");
 
                     // start parsing through the html for what we want 
@@ -108,15 +119,40 @@ const self = {
                     
                     let dateScraped = new Date().toISOString().slice(0, 10)
                     
+                    let productName = $('span[itemprop=name]').text()
+
+                    let productSKU = $('span.sku').text().split(' ')[1]
+
+                    let productPrice = $('span.final_price').text().trim().replace('$', '').replace(',', '')
+
+
                     let images = await self.page.$$eval('div.pdpImageCarosel > a > img', images => { 
                         // get the image source 
                         images = images.map(el => el.src)
                         return images
                     })
+                    
+                    let overview = await self.page.$$eval('div[aria-labelledby=tab1] > div.content p', texts => { 
+                        texts = texts.map(el => el.innerText.trim())
+
+                        
+                        return texts
+                    })
+                    
+                    // filter out null items and disclaimer text
+                    overview = overview.filter(item => !(item.includes('Disclaimer')))
+                    overview = overview.filter(item => item != '')
 
                     const metadata = { 
                         dateScraped: dateScraped,
-                        images: images
+                        dataSource:self.dataSource,
+                        url: url,
+                        productName: productName,
+                        productSKU: productSKU,
+                        productPrice: productPrice,
+                        images: images,
+                        overview: overview
+
                     }
 
                     console.log(metadata)
