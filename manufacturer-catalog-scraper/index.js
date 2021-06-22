@@ -2,7 +2,7 @@ const CANON = require('./canon')
 
 const app = async () => { 
 
-    await CANON.initialize();
+    await CANON.getLinks();
 
 }
 
