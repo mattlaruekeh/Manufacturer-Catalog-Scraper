@@ -22,7 +22,6 @@ const self = {
     */
     getLinks: async() => { 
         return new Promise(async (resolve, reject) => { 
-
             try {
                 console.log("Getting product links") 
                 let res = axios.get('https://app.scrapingbee.com/api/v1', {
@@ -35,18 +34,15 @@ const self = {
                 }).then(function (response) {
                     // handle success
                     // Store links in productLinks array for later use
-                    self.productLinks.push(response.data)
                     let urls = response.data
+                    self.productLinks.push(urls)
                     console.log("Got product links")
-                    // self.productLinks[0].all_links
                     return resolve(urls) 
                 })
-
             } catch (error) { 
                 return reject(error)
             }
         })
-         
     },
 
     /* 
@@ -88,14 +84,45 @@ const self = {
                 // make sure browser is initialized 
                 if (self.browser) { 
                     // open up the page
-                    
                     await self.page.goto(url, {waitUntil: 'domcontentloaded', timeout: 0});
-        
+                    
+                    // grab the html source
                     self.content = await self.page.content();
                     self.$ = cheerio.load(self.content);
                     let html = self.$.html()
-                
                     console.log("Got the html");
+
+                    // start parsing through the html for what we want 
+
+                    /* 
+                        What we want: 
+                        - Date Scraped 
+                        - Camera Name 
+                        - SKU 
+                        - Price 
+                        - Images 
+                        - Overview 
+                        - Features 
+                        - Specifications 
+                    */
+                    
+                    let dateScraped = new Date().toISOString().slice(0, 10)
+                    
+                    let images = await self.page.$$eval('div.pdpImageCarosel > a > img', images => { 
+                        // get the image source 
+                        images = images.map(el => el.src)
+                        return images
+                    })
+
+                    const metadata = { 
+                        dateScraped: dateScraped,
+                        images: images
+                    }
+
+                    console.log(metadata)
+
+
+                    // close browser and resolve the promise once finished
                     self.browser.close() 
                     return resolve(html)
                 }
@@ -108,6 +135,9 @@ const self = {
         
     },
 
+    /* 
+        APP: wrapper function to execute the tasks in order
+    */
     app: async() => { 
         try { 
             var tasks = [self.getLinks, self.scrapePage]
