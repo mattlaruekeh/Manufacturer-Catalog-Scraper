@@ -1,0 +1,21 @@
+{
+  "name": "manufacturer-catalog-scraper",
+  "version": "1.0.0",
+  "description": "Scrape Camera Manufacturers for Product Data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.1",
+    "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^10.0.0",
+    "fs": "^0.0.1-security",
+    "promise-request-retry": "^1.0.2",
+    "puppeteer": "^10.0.0",
+    "querystring": "^0.2.1"
+  }
+}
