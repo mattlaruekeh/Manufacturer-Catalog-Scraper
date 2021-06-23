@@ -1,0 +1,1503 @@
+
+
+<div class="content">
+<!-- BEGIN PDPTabs.jsp -->
+<!-- BEGIN Specification.jsp -->
+<!-- BEGIN Specification_Data.jspf -->
+<wcf:usebean var="swatchImagesList" classname="java.util.ArrayList">
+<input type="hidden" var="surl" value="https://shop.cusa.canon.com/estoreSpec/" autocomplete="off">
+<input type="hidden" var="spno" value="47736" autocomplete="off">
+<div class="itemthree">
+<link rel="stylesheet" type="text/css" href="/sys/estore_tech_spec.css">
+<script type="text/javascript"><!--[endif]-->
+/**
+function to use javascript refered in goToAnchor javascript method.
+*/
+function findPosY(obj) {
+var curtop = 0;
+if(obj.offsetParent)
+while(1) {
+curtop += obj.offsetTop;
+if (!obj.offsetParent)
+break;
+obj = obj.offsetParent;
+}
+else if(obj.y)
+curtop += obj.y;
+return curtop;
+}
+/**
+function to use javascript for "Back To Top" button
+*/
+function goToAnchor(anchorName){
+var anchorToMoveTo = document.anchors[anchorName];
+var moveToY = 0;
+if (anchorToMoveTo){
+if (anchorToMoveTo.posY){
+moveToY=anchorToMoveTo.posY;
+}else{
+moveToY=findPosY(anchorToMoveTo);
+anchorToMoveTo.posY=moveToY;
+}
+}
+window.scrollTo(0,moveToY);
+}
+</script>
+
+<div id="rounded_container">
+<div class="content_container service_and_support clearfix">
+<p>
+<span class="bold_text">Type</span>
+<br>Digital, AF/AE single-lens reflex camera</p><p>
+<span class="bold_text">Recording Media</span>
+<br></p><p>CFexpress cards, Type B</p>
+<ul>
+<li>Dual CFexpress card slots</li>
+<li>XQD, CFast, CF and SD cards not supported</li>
+</ul>
+<br>
+<table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;">
+<tbody><tr>
+<td style="background-color:#bfbfbf;"><center><strong>Specifications</strong></center></td>
+<td style="background-color:#bfbfbf;"><center><strong>CFexpress 1.0</strong></center></td>
+<td style="background-color:#bfbfbf;"><center><strong>CFast 2.0</strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#D7D7D7;"><center>Maximum transfer speed</center></td>
+<td><center>1.97 GB/s</center></td>
+<td><center>600 MB/s</center></td>
+</tr>
+</tbody></table>
+<p><strong>CFexpress cards provide significantly faster read/write speeds than CFast or CF cards, supporting extensive still-image burst rates, and RAW video recording.</strong></p>
+<p>* Canon is an authorized licensee of the CFast 2.0<sup>™</sup> trademark, which may be registered in various jurisdictions.</p>
+<br>
+<br>
+<br><p></p><p>
+<span class="bold_text">Image Format</span>
+<br>Approx. 36mm x 24mm (35mm Full-frame)</p><p>
+<span class="bold_text">Compatible Lenses</span>
+<br>Canon EF Lenses (excluding EF-S and EF-M lenses)</p><p>
+<span class="bold_text">Lens Mount</span>
+<br>Canon EF Mount</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Image Sensor</h3><p>
+<span class="bold_text">Type</span>
+<br>High-sensitivity, high-resolution, large single-plate full-frame CMOS sensor</p><p>
+<span class="bold_text">Pixels</span>
+<br>Effective Pixels: Approx. 20.1 megapixels</p><p>
+<span class="bold_text">Total Pixels</span>
+<br>Approx. 21.4 megapixels</p><p>
+<span class="bold_text">Aspect Ratio</span>
+<br>3:2 (Horizontal: Vertical)</p><p>
+<span class="bold_text">Color Filter System</span>
+<br>RGB primary color filters</p><p>
+<span class="bold_text">Low Pass Filter</span>
+<br>High Detail Low Pass Filter, breaking one incoming light ray into 16 rays at image sensor</p><p>
+<span class="bold_text">Dust Deletion Feature</span>
+<br>(1) Self Cleaning Sensor Unit <br><br>
+</p><ul>
+<li>Self-cleaning can be done automatically when the power is turned on/off.</li>
+<li>During manual cleaning ([Clean now]), the data for light spot correction is also obtained.</li> 
+</ul>
+(2) Dust Delete Data acquisition and appending <br><br>
+<ul>
+<li>The coordinates of the dust adhering to the low-pass filter are detected by a test shot and appended to subsequent images.</li>
+<li>The dust coordinate data appended to the image is used by the EOS software to automatically erase the dust spots.</li>
+</ul>
+(3) Manual cleaning <br><br><br><br><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Recording System</h3><p>
+<span class="bold_text">Recording Format</span>
+<br>Design Rule for Camera File System 2.0 and EXIF 2.31* <br><br>
+* Supports time difference information.</p><p>
+<span class="bold_text">File Name</span>
+<br></p><table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td colspan="2" style="background-color:#a6a6a6;"><center><strong>Image type</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Extension</strong>
+</center></td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#d0d0d0;"><center><strong>Stills</strong><strong></strong></center></td>
+<td style="text-align:center;">JPEG</td>
+<td style="text-align:center;">JPG</td>
+</tr>
+<tr>
+<td style="text-align:center;">HEIF</td>
+<td style="text-align:center;">HIF<sup></sup></td>
+</tr>
+<tr>
+<td style="text-align:center;">RAW</td>
+<td rowspan="2" style="text-align:center;">CR3</td>
+</tr>
+<tr>
+<td style="text-align:center;">C-RAW</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#d0d0d0;"><center><strong>Movies</strong>
+</center></td>
+<td style="text-align:center;">ALL-I, IPB</td>
+<td style="text-align:center;">MP4</td>
+</tr>
+<tr>
+<td style="text-align:center;">RAW</td>
+<td style="text-align:center;">CRM</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<br><br><p></p><p>
+<span class="bold_text">File Size</span>
+<br></p><p>JPEG (8bit), HEIF (10 bit), RAW (14 bit, Canon original)</p>
+<table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td colspan="2" style="background-color:#a6a6a6;"><center><strong>Image quality</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Resolution (Pixels)</strong>
+</center></td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#d0d0d0;"><center><strong>JPEG</strong><strong></strong></center></td>
+<td style="text-align:center;">L</td>
+<td style="text-align:center;">Approx. 20.0 megapixels (5472 x 3648)</td>
+</tr>
+<tr>
+<td style="text-align:center;">M1</td>
+<td style="text-align:center;">Approx. 12.7 megapixels (4368 x 2912)<sup></sup></td>
+</tr>
+<tr>
+<td style="text-align:center;">M2</td>
+<td style="text-align:center;">Approx. 8.9 megapixels (3648 x 2432)</td>
+</tr>
+<tr>
+<td style="text-align:center;">S</td>
+<td style="text-align:center;">Approx. 5.0 megapixels (2736 x 1824)</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>HEIF</strong>
+</center></td>
+<td style="text-align:center;">L</td>
+<td rowspan="2" style="text-align:center;">Approx. 20 megapixels (5472 x 3648)</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><strong>RAW</strong></td>
+<td style="text-align:center;">RAW / C-RAW</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<br><br><p></p><p>
+<span class="bold_text">Backup Recording</span>
+<br>N/A</p><p>
+<span class="bold_text">File Numbering</span>
+<br><strong>The following three types of file numbers can be set:</strong><br>
+(1) Continuous numbering <br>
+</p><ul><li>The numbering of captured images continues even after you replace the card.</li></ul>
+(2) Auto reset<br>
+<ul><li>When you replace the card, the numbering will be reset to start from 0001. If the new card already contains images, the numbering will continue from the last recorded image in the card.</li></ul>	
+(3) Manual reset <br>
+<ul><li>Resets the file number to 0001, and creates a new folder automatically.</li></ul>
+<br><p></p><p>
+<span class="bold_text">RAW + JPEG Simultaneous Recording</span>
+<br>Simultaneous recording of any combination of RAW/C-RAW and JPEG or HEIF image-recording quality is supported.</p><p>
+<span class="bold_text">Color Space</span>
+<br>sRGB, Adobe RGB</p><p>
+<span class="bold_text">Picture Style</span>
+<br>Auto, Standard, Portrait, Landscape, Fine Detail, Neutral, Faithful, Monochrome, User Defined 1-3* <br><br>
+* [Standard] is the default setting for [User Def. 1-3]</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>White Balance</h3><p>
+<span class="bold_text">Settings</span>
+<br>Auto (Ambience priority/White priority), Daylight, Shade, Cloudy<sup>*1</sup>, Tungsten Light, White Fluorescent Light, Flash (Auto Setting)<sup>*2</sup>, Custom (Custom WB) 1-5<sup>*3</sup>, Color Temperature<br><br><br><br>
+<sup>*1</sup> Also effective in twilight and sunset.<br><br>
+<sup>*2</sup> With an EX or EL-series Speedlite having the color temperature information transmission feature, the color temperature setting changes to match the color temperature when the flash is fired. Set to approx. 6000K if the flash unit does not have the color temperature communication feature.<br><br>
+<sup>*3</sup> [Select image on card], [Record and register WB], and [Edit WB name] are supported. HEIF image cannot be selected.<br><br></p><p>
+<span class="bold_text">Auto White Balance</span>
+<br>Option between ambience priority and white priority settings</p><p>
+<span class="bold_text">Color Temperature Compensation</span>
+<br>Blue/amber bias: ±9 levels<br>
+Magenta/green bias: ±9 levels<br>
+Corrected in reference to the current WB mode's color temperature.</p><p>
+<span class="bold_text">Color Temperature Information Transmission</span>
+<br>Provided</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Viewfinder</h3><p>
+<span class="bold_text">Type</span>
+<br>Eye-level SLR type, with pentaprism</p><p>
+<span class="bold_text">Coverage</span>
+<br>Approx. 100% vertically and horizontally</p><p>
+<span class="bold_text">Magnification</span>
+<br>Approx. 0.76x (-1m<sup>-1</sup> with 50mm lens at infinity) / 35.1° angle of view</p><p>
+<span class="bold_text">Eye Point</span>
+<br>Approx. 20mm (at -1m<sup>-1</sup> from eyepiece lens center)</p><p>
+<span class="bold_text">Dioptric Adjustment Correction</span>
+<br>-3.0 to +1.0 m<sup>-1</sup> (diopter)</p><p>
+<span class="bold_text">Focusing Screen</span>
+<br>Fixed</p><p>
+<span class="bold_text">Mirror</span>
+<br>Quick-return half mirror</p><p>
+<span class="bold_text">Viewfinder Information</span>
+<br><strong> AF displays, with red dot-matrix illumination:</strong> <br><br>
+191 AF points; active AF Area; Zone AF brackets; Automatic AF point select brackets <br><br> <br><br>
+<strong> Exposure Displays:</strong> <br><br>
+Manual mode icon; AE Lock icon; Flash ready icon; FEL icon; Shutter speed; Aperture; Exposure compensation scale; Frames remaining on card; ISO; Highlight Tone Priority (D+) active; AF confirmation icon; AI Servo AF active arrows <br><br> <br><br>
+<strong> Right side display:</strong> <br><br>
++/- 3-stop metering scale; Flash Exposure Compensation/FEL/Flash Metered Manual scale; Frames remaining in burst (0~99); JPEG/RAW icons; Battery level icon <br><br> <br><br>
+<strong> Displayed on focus screen, via LCD overlay:</strong> <br><br>
+Spot metering circle; Electronic level display; Grid lines; Shooting mode; Metering mode; White Balance setting; Drive mode; AF Operation; Flicker Detection icon; Warning symbol; AF status indicator <br><br>
+All except Spot meter circle can be displayed or not with [Show/Hide in viewfinder] <br><br></p><p>
+<span class="bold_text">Depth Of Field Preview</span>
+<br>Provided</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Autofocus</h3><p>
+<span class="bold_text">Type</span>
+<br>TTL secondary image-forming phase-difference detection system with High-res AF Sensor</p><p>
+<span class="bold_text">AF Points</span>
+<br></p><p>Max. 191 points (Cross-type AF points: Max. 155 points)</p>
+<table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:left !important;">
+<tbody><tr>
+<td style="background-color:#a6a6a6;"><center>
+<strong>AF Point type</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Maximum available AF points</strong>
+</center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dual Cross-type AF Points at f/2.8 and f/5.6
+</td>
+<td style="text-align:center;">1</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cross-type AF Points at f/4.0+f/5.6</td>
+<td style="text-align:center;">90<sup></sup></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cross-type AF Points at f/5.6</td>
+<td style="text-align:center;">64</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AF Points at f/5.6</td>
+<td style="text-align:center;">36</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AF Points at f/8</td>
+<td style="text-align:center;">191</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cross-type AF Points at f/8</td>
+<td style="text-align:center;">65</td>
+</tr>
+</tbody></table>
+<br>
+<br>
+<p>The number of AF points, cross-type AF points and dual cross-type AF points vary depending on the lens used.</p>
+<br>
+<br>
+<br><p></p><p>
+<span class="bold_text">AF Working Range</span>
+<br></p><table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:left !important;">
+<tbody><tr>
+<td style="background-color:#a6a6a6;"><center>
+<strong>AF Point</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Brightness</strong>
+</center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f/2.8 AF point at center
+</td>
+<td style="text-align:center;">EV -4 – 21</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f/5.6 AF point at center</td>
+<td style="text-align:center;">EV -3 – 21</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Peripheral f/5.6 AF points</td>
+<td style="text-align:center;">EV -1.5 – 21</td>
+</tr>
+</tbody></table>
+<br>
+<br>
+<br><p></p><p>
+<span class="bold_text">Focusing Modes</span>
+<br>(1) Autofocus <br><br>
+</p><ol type="1">
+<li>One-Shot AF</li>
+<li>AI Servo AF</li>
+</ol>
+(2) Manual focus<p></p><p>
+<span class="bold_text">AF Point Selection</span>
+<br>Manually-selected AF Areas <br><br>
+</p><ul>
+<li>Spot AF</li>
+<li>Single-point AF</li>
+<li>AF point Expansion (4-point surround)</li>
+<li>AF point Expansion (8-point surround)</li>
+<li>Zone AF</li>
+<li>Large Zone AF (all AF points divided into three large zones)</li>
+</ul>
+<br><br> 
+Automatic AF point selection (all AF points available; reference brackets around AF array)
+<br><br><p></p><p>
+<span class="bold_text">AF Function Registration/Switching</span>
+<br>Customizable with Custom Controls</p><p>
+<span class="bold_text">Selected AF Point Display</span>
+<br>Red dot-matrix illumination of AF points, zone AF brackets, and Auto AF Area brackets</p><p>
+<span class="bold_text">Active AF Point Indicator</span>
+<br>(1) Displayed in viewfinder area</p><p>
+<span class="bold_text">AF Assist Beam</span>
+<br>When an external EOS-dedicated Speedlite is attached to the camera, the following options are available: <br><br>
+(1) Enable <br><br>
+(2) Disable <br><br>
+(3) IR AF assist beam only <br><br></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Exposure Control</h3><p>
+<span class="bold_text">Metering Modes</span>
+<br><strong>Optical Viewfinder:</strong> 216-zone (18 x 12) metering with approx. 400,000-pixel RGB+IR metering sensor. <br><br> <br><br>
+<strong>Live View:</strong> 384-zone (24 x 16) metering using image sensor output signals <br><br> <br><br>
+The following metering modes selectable: <br><br>
+(1) Evaluative metering (linked to all AF points) <br><br>
+(2) Partial metering (Viewfinder: Approx. 6.2% of the screen) (Live View: Approx. 5.8% of the screen) <br><br>
+(3) Spot metering (center, approx. 1.5% of viewfinder) (Live View: Approx. 2.9% of the screen) <br><br>
+</p><ol>
+<li>Center spot metering</li>
+<li>AF point-linked spot metering (Custom Function) <br><br>
+<ul>
+<li>Linkable to all AF points.</li>
+<li>With automatic AF point selection, center spot metering will apply.</li> 
+</ul>
+</li>
+<li>Multi-spot metering (Optical Viewfinder only)</li>
+</ol>
+(4) Center-weighted average metering <br><br>
+<ul>
+<li>The selectable metering modes can be restricted (Custom Function).</li></ul><p></p><p>
+<span class="bold_text">Metering Range</span>
+<br>At 73°F/23°C, ISO 100, with evaluative metering: <br>
+EV 0–20 (Optical Viewfinder)<br>
+EV -3–20 (Live View)<br>
+EV -1–20 (Movie Recording) <br></p><p>
+<span class="bold_text">Exposure Control Systems</span>
+<br>(1) Program AE (Shiftable) <br><br>
+(2) Shutter-priority AE (Safety shift possible) <br><br>
+(3) Aperture-priority AE (Safety shift possible) <br><br>
+(4) Manual exposure <br><br>
+</p><ul>
+<li>The metering mode can be specified.</li></ul>
+(5) Bulb <br><br>
+(6) Three custom shooting modes <br><br><p></p><p>
+<span class="bold_text">ISO Speed Range</span>
+<br></p><p><strong>Manual setting</strong></p>
+<table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:left !important;">
+<tbody><tr>
+<td style="background-color:#d0d0d0;"><center><strong>Normal ISO Speeds</strong>
+</center>
+</td>
+<td><center>
+ISO 100–102400 (in 1/3-stop increments)
+</center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>Expanded ISO Speeds (Equivalent)</strong>
+</center></td>
+<td><center>
+L: 50, H1: 204800, H2: 409600, H3: 819200
+</center></td>
+</tr>
+</tbody></table>
+<br>
+<br>
+<p>Highlight Tone Priority: ISO range 200–102400. <br>
+Expanded ISO cannot be set during HDR shooting.</p>
+<br>
+<br>
+<br>
+<p><strong>Auto setting</strong></p>
+<table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:left !important;">
+<tbody><tr>
+<td rowspan="2" style="background-color:#a6a6a6;"><center>
+<strong>Shooting Mode</strong>
+</center></td>
+<td colspan="2" style="background-color:#a6a6a6;"><center><strong>ISO Settings</strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>No Flash</strong></center></td>
+<td style="background-color:#a6a6a6;"><center><strong>With Flash</strong></center></td>
+</tr>
+<tr>
+<td><center>P, Tv, Av, M</center>
+</td>
+<td><center>ISO 100<sup>*1</sup><sup>*2</sup>–102400<sup>*2</sup></center></td>
+<td><center>ISO 100<sup>*1</sup><sup>*2</sup>–6400<sup>*2</sup><sup>*3</sup></center></td>
+</tr>
+<tr>
+<td><center>During Bulb shooting</center></td>
+<td colspan="2"><center>ISO 400 fixed<sup>*4</sup></center></td>
+</tr>
+</tbody></table>
+<br>
+<br>
+<p>
+<sup>*1</sup> ISO 200 when [Highlight tone priority] is set to [Enable] or [Enhanced].<br>
+<sup>*2</sup> Varies depending on [Maximum] and [Minimum] of [Auto range]. <br>
+<sup>*3</sup> ISO 1600 when using a lens that is not compatible with "Variable control of maximum ISO Auto limit for E-TTL".<br>
+<sup>*4</sup> If outside the setting range, changed to the value closest to ISO 400.</p>
+<br>
+<br>
+<br><p></p><p>
+<span class="bold_text">Exposure Compensation</span>
+<br>Adjusted by user: ±5 stops in 1/3- or 1/2-stop increments<br>
+AEB: ±3 stops in 1/3- or 1/2-stop increments <br>
+* Indicated up to ±3 stops on the LCD panel and in the viewfinder. <br></p><p>
+<span class="bold_text">AE Lock</span>
+<br>(1) Auto AE lock <br><br>
+</p><ul>
+<li>In the One-Shot AF mode with evaluative metering, AE lock takes effect when focus is achieved.</li>
+</ul>
+(2) User-applied AE lock <br><br>
+<ul>
+<li>With AE lock button in P, Av, Tv and M modes. (AE lock is updated each time you press the button.)</li>
+<li>Enabled in all metering modes.</li>
+</ul><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Shutter</h3><p>
+<span class="bold_text">Type</span>
+<br>Vertical-travel, mechanical, focal-plane shutter with all speeds electronically-controlled
+</p><ul>
+<li>Live View: Mechanical, Electronic 1st-curtain, and Electronic shutter operation selectable</li>
+</ul><p></p><p>
+<span class="bold_text">Shutter Speeds</span>
+<br>When [Mechanical] or [Elec. 1st-curtain] is set: 1/8000 to 30 sec., bulb <br><br>
+When [Electronic] is set: 1/8000-0.5 sec.<br><br>
+X-sync: 1/250 sec.<br><br>
+</p><ul>
+<li>Available shutter speed range can be set via Custom Function</li>
+<li>Flash shooting not possible during Electronic shutter operation</li>
+</ul><p></p><p>
+<span class="bold_text">Shutter Release</span>
+<br>Soft-touch electromagnetic release</p><p>
+<span class="bold_text">Self Timer</span>
+<br>10-sec. delay, 2-sec. delay</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>External Speedlite</h3><p>
+<span class="bold_text">EOS Dedicated Speedlite</span>
+<br>E-TTL II autoflash with all EX and EL Series Speedlites</p><p>
+<span class="bold_text">Zooming to Match Focal Length</span>
+<br>Provided</p><p>
+<span class="bold_text">Flash Metering</span>
+<br>Ambience Priority, Standard, Flash priority</p><p>
+<span class="bold_text">Flash Exposure Compensation</span>
+<br>±3 stops in 1/3- or 1/2-stop increments</p><p>
+<span class="bold_text">FE Lock</span>
+<br>Provided</p><p>
+<span class="bold_text">External Flash Settings</span>
+<br>(1) E-TTL each shot <br>
+&nbsp;&nbsp;&nbsp;(New E-TTL reading for each exposure in a continuous sequence) <br>
+(2) E-TTL 1st shot <br>
+&nbsp;&nbsp;&nbsp;(Flash exposure locked for 2nd and subsequent exposures in a continuous sequence)
+<br>
+<br>
+Available for EX and EL series Speedlites. <br>
+(1) General speedlite settings: <br>
+&nbsp;&nbsp;&nbsp; Flash firing; E-TTL balance; E-TTL II metering; Continuous flash control; Flash sync speed in Av mode <br>
+(2) Flash function settings: <br>
+&nbsp;&nbsp;&nbsp; Flash exposure mode; Wireless flash control; Flash head zoom; Flash sync (1st/2nd curtain sync and High-speed sync); Flash exposure compensation; Flash exposure bracketing <br>
+(3) Flash Custom Function settings<br></p><p>
+<span class="bold_text">PC Terminal</span>
+<br>Provided <br><br>
+* No polarity. <br><br>
+* Sync speed: Since the flash duration of studio flash units vary, set a sync speed within 1/125 sec. to 1/30 sec. and check if the flash sync works. <br><br>
+* Both the accessory shoe (X-sync contact with maximum sync speed of 1/250 sec.) and the PC terminal can be used simultaneously for simultaneous flash firing.
+<br><br></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Drive System</h3><p>
+<span class="bold_text">Drive Modes</span>
+<br>(1) Single shooting <br>
+(2) High-speed continuous shooting*: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Viewfinder: Max. approx. 16 shots/sec. (user-adjustable 16~3 fps) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Live View Shooting: Max. approx. 20 shots/sec. <br>
+(3) Continuous Shooting: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Viewfinder: Max. approx. 10 shots/sec. (user-adjustable 15~2 fps) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Live View Shooting<sup>*1</sup>: Max. approx. 10 shots/sec.<sup>*2</sup> <br>
+(4) Low-speed continuous shooting <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Viewfinder: Max. approx. 3 shots/sec. (user-adjustable 14~1 fps) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Live View Shooting<sup>*1</sup>: Max. approx. 3 shots/sec. <br>
+(5) Silent single shooting <br>
+(6) Silent high-speed continuous shooting <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Viewfinder: Max. approx. 8 shots/sec. (user-adjustable 8~2 fps) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Live View Shooting<sup>*1</sup>: Max. approx. 10 shots/sec.<sup>*2</sup> <br>
+(7) Silent low-speed continuous shooting <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Viewfinder: Max. approx. 3 shots/sec. (user-adjustable 14~1 fps) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Live View Shooting<sup>*1</sup>: Max. approx. 3 shots/sec. <br>
+<br>
+*Continuous shooting speed may be slower under the following conditions: shutter speed, aperture, aperture status during continuous shooting, flash, anti-flicker shooting set to Enable, remaining battery level, temperature, subject conditions, brightness (shooting under low light, etc.), lens type, power source type, when internal memory is full (momentarily prevents shooting). <br> <br>
+<sup>*1</sup> When the electronic shutter is used, the shooting speed of the continuous shooting becomes the same as the high-speed continuous shooting. <br> <br>
+<sup>*2</sup> When the mechanical shutter is used, the shooting speed of the continuous shooting will be approx. 8.0 shots/sec.<br></p><p>
+<span class="bold_text">Maximum Burst</span>
+<br></p><p>The maximum burst during continuous shooting is as follows:</p>
+<br><br>
+<table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td style="background-color:#a6a6a6;"><center><strong>Image Quality</strong></center></td>
+<td style="background-color:#a6a6a6;"><center><strong> File Size<br><br>
+[Approx. MB]</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Possible Shots <br><br> [Approx.]<sup>*1</sup></strong></center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Maximum Burst <br><br> [Approx.]<sup>*1</sup></strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0; text-align:left; padding-left: 25px;"><strong><center>L</center></strong></td>
+<td style="text-align:center;">7.6</td>
+<td style="text-align:center;">40,650</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>M1</center></strong></td>
+<td style="text-align:center;">5.4</td>
+<td style="text-align:center;">56,960</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>M2</center></strong></td>
+<td style="text-align:center;">4.1</td>
+<td style="text-align:center;">74,070</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>S</center></strong></td>
+<td style="text-align:center;">2.8</td>
+<td style="text-align:center;">109,110</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>HEIF</center></strong></td>
+<td style="text-align:center;">7.6</td>
+<td style="text-align:center;">39,650</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW<sup>*2</sup></center></strong></td>
+<td style="text-align:center;">22.1</td>
+<td style="text-align:center;">14,150</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW<sup>*2</sup></center></strong></td>
+<td style="text-align:center;">13.1</td>
+<td style="text-align:center;">27,560</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW+L</center></strong></td>
+<td style="text-align:center;">22.1+7.6</td>
+<td style="text-align:center;">10,500</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW+L</center></strong></td>
+<td style="text-align:center;">13.1+7.6</td>
+<td style="text-align:center;">16,420</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW+M1</center></strong></td>
+<td style="text-align:center;">22.1+5.4</td>
+<td style="text-align:center;">11,330</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW+M1</center></strong></td>
+<td style="text-align:center;">13.1+5.4</td>
+<td style="text-align:center;">18,570</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW+M2</center></strong></td>
+<td style="text-align:center;">22.1+4.1</td>
+<td style="text-align:center;">11,880</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW+M2</center></strong></td>
+<td style="text-align:center;">13.1+4.1</td>
+<td style="text-align:center;">20,080</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW+S</center></strong></td>
+<td style="text-align:center;">22.1+2.8</td>
+<td style="text-align:center;">12,530</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW+S</center></strong></td>
+<td style="text-align:center;">13.1+2.8</td>
+<td style="text-align:center;">22,000</td>
+<td style="text-align:center;">1,000 or more</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>RAW+HEIF</center></strong></td>
+<td style="text-align:center;">24.3+7.6</td>
+<td style="text-align:center;">9,620</td>
+<td style="text-align:center;">350</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;text-align:left; padding-left: 25px;"><strong><center>C-RAW+HEIF</center></strong></td>
+<td style="text-align:center;">13.7+7.6</td>
+<td style="text-align:center;">14,380</td>
+<td style="text-align:center;">420</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<p>* File size, number of possible shots, and maximum burst vary depending on shooting conditions (including JPEG/HEIF image quality: 8, subject, memory card brand, card storage capacity, ISO speed, Picture Style, and Custom Function, etc). <br><br><br><br>
+<sup>*1</sup> The number of possible shots and standard maximum burst apply to a compliant 325GB card based on Canon testing standards, in viewfinder shooting. <br><br><br><br>
+<sup>*2</sup> With [HDR PQ] set to [OFF].</p>
+<br><br>
+<br><br>
+<br><br><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Live View Functions</h3><p>
+<span class="bold_text">Shooting Modes</span>
+<br>Still photo and video recording</p><p>
+<span class="bold_text">Focusing</span>
+<br>(1) Dual Pixel CMOS AF <br><br>
+</p><ul>
+<li>Dual Pixel CMOS AF is possible with all EF lenses.</li>
+</ul>
+(2) Manual focus<br><br>
+<ul>
+<li> Magnify the image by 5x or 10x and focus manually.</li>
+<li> MF peaking and Focus Guide possible</li>
+</ul><p></p><p>
+<span class="bold_text">Metering Modes</span>
+<br>(1) Evaluative metering (linked to all AF points) <br><br>
+(2) Partial metering: Approx. 5.8% of the screen <br><br>
+(3) Spot metering: Approx. 2.9% of the screen <br><br>
+(4) Center-weighted average metering <br><br>
+AE lock possible. The active metering timer can be changed.</p><p>
+<span class="bold_text">Metering Range</span>
+<br>EV -3–20 (at 73°F/23°C, ISO 100, with evaluative metering)</p><p>
+<span class="bold_text">Grid Display</span>
+<br>(1) Off <br><br>
+(2) 3x3 <br><br>
+(3) 6x4 <br><br>
+(4) 3x3+diag <br><br></p><p>
+<span class="bold_text">Silent Shooting</span>
+<br>Possible with Shutter mode set to Electronic
+</p><ul>
+<li>Audible sounds possible from lens operation, etc.</li>
+<li>Flash not possible when LV Shutter mode set to Electronic</li>
+</ul>
+<br><br><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Video Shooting</h3><p>
+<span class="bold_text">File Format</span>
+<br>Normal movie recording: <br><br>
+</p><ul>
+<li>MPEG4 H.264 / AVC</li>
+<li>8-bit, 4:2:0; Color space BT.709</li>
+</ul>
+Canon Log recording: <br><br>
+<ul>
+<li>MPEG4 H.265 / HEVC</li>
+<li>10-bit, 4:2:2; Color space BT.709 / BT.2020</li>
+</ul>
+Audio: AAC or Linear PCM (Audio Compression in C.Fn menu, during ALL-I or IPB recording) <br><br>
+<ul>
+<li>Internal monaural microphone</li>
+<li>3.5mm stereo external microphone jack</li>
+</ul><p></p><p>
+<span class="bold_text">File Size</span>
+<br></p><table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td colspan="3" style="background-color:#a6a6a6;"><center><strong>NTSC</strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>5.5K RAW <br><br> (5472 x 2886)</strong></center></td>
+<td style="background-color:#d0d0d0;"><center>59.94 fps* <br><br>
+29.97 fps <br><br>
+24.00 fps <br><br>
+23.98 fps</center></td>
+<td style="text-align:center;">RAW</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>4K DCI <br><br>(4096 x 2160)</strong></center></td>
+<td style="background-color:#d0d0d0;"><center>59.94 fps* <br><br>
+29.97 fps <br><br>
+24.00 fps <br><br>
+23.98 fps</center></td>
+<td style="text-align:center;">ALL-I<br><br>
+IPB</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>4K UHD <br><br>(3840 x 2160)</strong></center></td>
+<td style="background-color:#d0d0d0;"><center>59.94 fps* <br><br>
+29.97 fps <br><br> 23.98 fps^</center></td>
+<td style="text-align:center;">ALL-I<br><br>
+IPB</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>4K DCI (cropped) <br><br>(4096 x 2160)</strong></center></td>
+<td style="background-color:#d0d0d0;"><center>59.94 fps <br><br>
+29.97 fps <br><br>
+24.00 fps <br><br>
+23.98 fps</center></td>
+<td style="text-align:center;">ALL-I<br><br>
+IPB</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#d0d0d0;"><center><strong>Full HD <br><br>(1920 x 1080)</strong></center></td>
+<td style="background-color:#d0d0d0;"><center>119.90 fps** <br><br>
+59.94 fps <br><br>
+23.98 fps^</center></td>
+<td style="text-align:center;">ALL-I<br><br>
+IPB</td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center>29.97 fps</center></td>
+<td style="text-align:center;">ALL-I<br><br>
+IPB<br><br>
+IPB (Light)</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<p>* AF does not function. <br><br>
+** Audio not recorded at High Frame Rate 119.90 fps recording <br><br>
+^ 24p recording will be supported through firmware update after shipping.</p>
+<br><br>
+<br><br>
+<br><br><p></p><p>
+<span class="bold_text">Focusing</span>
+<br>(1) Dual Pixel CMOS AF <br><br>
+(2) Manual focus <br><br>
+* Magnify the image by 5x or 10x and focus manually (not possible during movie shooting).</p><p>
+<span class="bold_text">Exposure Control</span>
+<br></p><table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;">
+<tbody><tr>
+<td rowspan="2" style="background-color:#a6a6a6;"><center><strong>Shooting Mode</strong>
+</center> <center>
+</center></td>
+<td rowspan="2" style="background-color:#a6a6a6;"><center><strong>Exposure Control</strong></center></td>
+<td colspan="2" style="background-color:#a6a6a6;"><center><strong>Shutter Speed (sec.)</strong></center></td>
+<td colspan="2" style="background-color:#a6a6a6;"><center><strong>Aperture</strong>
+</center></td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>Auto Setting</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Manual Setting</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Auto Setting</strong>
+</center></td>
+<td style="background-color:#a6a6a6;"><center><strong>Manual Setting</strong>
+</center></td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>P, bulb</strong>
+</center></td>
+<td style="background-color:#d0d0d0;"><center><strong>Program AE for movie shooting</strong>
+</center></td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">—</td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>Tv</strong></center></td>
+<td style="background-color:#d0d0d0;"><center><strong>Movie shutter-priority AE</strong></center></td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">—</td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>Av</strong></center></td>
+<td style="background-color:#d0d0d0;"><center><strong>Movie aperture-priority AE</strong></center>
+</td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">Yes</td>
+</tr>
+<tr>
+<td style="background-color:#a6a6a6;"><center><strong>M</strong></center></td>
+<td style="background-color:#d0d0d0;"><center><strong>Movie manual exposure</strong></center></td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">Yes</td>
+<td style="text-align:center;">—</td>
+<td style="text-align:center;">Yes</td>
+</tr>
+</tbody></table>
+<br>
+<br><p></p><p>
+<span class="bold_text">Exposure Compensation</span>
+<br>Up to ±3 stops in 1/3- or 1/2-stop increments <br>
+* If AE Microadjustment is performed, the settable exposure compensation amount will decrease by the amount of the AE Microadjustment. For example, if you set the AE Microadjustment to +1 stop, the exposure compensation amount will be limited to a maximum +2 stops on the positive side.</p><p>
+<span class="bold_text">Audio Video Output</span>
+<br></p><p><strong>Canon Log: OFF (H.264 / AVC)</strong></p>
+<table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td colspan="3" rowspan="2" style="background-color:#a6a6a6;"><center><strong>Movie-recording Size</strong>
+</center></td>
+<td colspan="3" style="background-color:#a6a6a6;"><center><strong>Total Recording Time (Approx.)</strong>
+</center></td>
+<td rowspan="2" style="background-color:#a6a6a6;"><center><strong>Movie Bit Rate / <br><br>
+File Size (Approx.)</strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center>
+<strong>64 GB</strong>
+</center></td>
+<td style="background-color:#d0d0d0;"><center>
+<strong>256 GB</strong>
+</center></td>
+<td style="background-color:#d0d0d0;"><center><strong>1 TB</strong>
+</center></td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;"><center><strong>5.5K RAW <br><br>(5472 x 2886)</strong></center></td>
+<td style="background-color:#bfbfbf;"><center>
+59.94 fps
+</center></td>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+RAW
+</center></td>
+<td style="text-align:center;">3 min.</td>
+<td style="text-align:center;">13 min.</td>
+<td style="text-align:center;">50 min.</td>
+<td style="text-align:center;">2600 Mbps<br><br>
+18711 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">29.97 fps <br><br>24.00 fps <br><br> 23.98 fps</td>
+<td style="text-align:center;">4 min.</td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 13 min.</td>
+<td style="text-align:center;">1800 Mbps<br><br>
+12937 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K DCI <br><br>
+(4096 x 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+59.94 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">9 min.</td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 21 min.</td>
+<td style="text-align:center;">940 Mbps<br><br>
+6734 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>IPB</center></td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 27 min.</td>
+<td style="text-align:center;">9 hr. 35 min.</td>
+<td style="text-align:center;">230 Mbps<br><br>
+1656 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+29.97 fps <br><br> 24.00 fps <br><br> 23.98 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>ALL-I</center></td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>IPB</center></td>
+<td style="text-align:center;">1 hr. 10 min.</td>
+<td style="text-align:center;">4 hr. 40 min.</td>
+<td style="text-align:center;">18 hr. 17 min.</td>
+<td style="text-align:center;">120 Mbps<br><br>
+869 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K DCI
+cropped <br><br>(4096 x 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+59.94 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">9 min.</td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 21 min.</td>
+<td style="text-align:center;">940 Mbps<br><br>
+6734 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB
+</center></td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 27 min.</td>
+<td style="text-align:center;">9 hr. 35 min.</td>
+<td style="text-align:center;">230 Mbps<br><br>
+1656 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+29.97 fps <br><br> 24.00 fps <br><br> 23.98 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB
+</center></td>
+<td style="text-align:center;">1 hr. 10 min.</td>
+<td style="text-align:center;">4 hr. 40 min.</td>
+<td style="text-align:center;">18 hr. 17 min.</td>
+<td style="text-align:center;">120 Mbps<br><br>
+869 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K UHD <br><br>(3840 X 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;">59.94 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">9 min.</td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 21 min.</td>
+<td style="text-align:center;">940 Mbps<br><br>
+6734 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">36 min.</td>
+<td style="text-align:center;">2 hr. 27 min.</td>
+<td style="text-align:center;">9 hr. 35 min.</td>
+<td style="text-align:center;">230 Mbps<br><br>
+1656 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;">29.97 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">1 hr. 10 min.</td>
+<td style="text-align:center;">4 hr. 40 min.</td>
+<td style="text-align:center;">18 hr. 17 min.</td>
+<td style="text-align:center;">120 Mbps<br><br>
+869 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="6" style="background-color:#bfbfbf;"><center><strong>Full HD <br><br>
+(1920 x 1080)</strong></center></td>
+<td style="background-color:#bfbfbf;">119.9 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">23 min.</td>
+<td style="text-align:center;">1 hr. 34 min.</td>
+<td style="text-align:center;">6 hr. 8 min.</td>
+<td style="text-align:center;">360 Mbps<br><br>
+2586 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;">59.94 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">47 min.</td>
+<td style="text-align:center;">3 hr. 8 min.</td>
+<td style="text-align:center;">12 hr. 14 min.</td>
+<td style="text-align:center;">180 Mbps<br><br>
+1298 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">2 hr. 18 min.</td>
+<td style="text-align:center;">9 hr. 14 min.</td>
+<td style="text-align:center;">36 hr. 6 min.</td>
+<td style="text-align:center;">60 Mbps<br><br>
+440 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="3" style="background-color:#bfbfbf;"><center>
+29.97 fps</center></td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">1 hr. 33 min.</td>
+<td style="text-align:center;">6 hr. 12 min.</td>
+<td style="text-align:center;">24 hr. 16 min.</td>
+<td style="text-align:center;">90 Mbps<br><br>
+655 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">4 hr. 30 min.</td>
+<td style="text-align:center;">18 hr. 2 min.</td>
+<td style="text-align:center;">70 hr. 27 min.</td>
+<td style="text-align:center;">30 Mbps<br><br>
+226 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB <br><br> (Light)
+</center></td>
+<td style="text-align:center;">11 hr. 35 min.</td>
+<td style="text-align:center;">46 hr. 23 min.</td>
+<td style="text-align:center;">181 hr. 13 min.</td>
+<td style="text-align:center;">12 Mbps<br><br>
+88 MB/min.</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<p>* Bit rate indicates video output only, audio is not included. <br><br>
+* Movie recording is interrupted if the maximum recording time per movie, 29 min. 59 sec., is exceeded. (Time is different for High Frame Rate movies.) <br><br>
+*Sound is not recorded for approx. the last two frames when the compression method for movie recording quality is IPB or IPB Light (audio: AAC) and [C. Fn 7-7 Audio compression] is set to [Enable]. The video and sound may be slightly out of sync when movies are played back in Windows.</p>
+<br><br>
+<br><br>
+<p><strong>Canon Log: ON (H.265 / HEVC)</strong></p>
+<table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;" width="100%">
+<tbody><tr>
+<td colspan="3" rowspan="2" style="background-color:#a6a6a6;"><center><strong>Movie-recording Size</strong>
+</center></td>
+<td colspan="3" style="background-color:#a6a6a6;"><center><strong>Total Recording Time (Approx.)</strong>
+</center></td>
+<td rowspan="2" style="background-color:#a6a6a6;"><center><strong>Movie Bit Rate / <br><br>
+File Size (Approx.)</strong></center></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center>
+<strong>64 GB</strong>
+</center></td>
+<td style="background-color:#d0d0d0;"><center>
+<strong>256 GB</strong>
+</center></td>
+<td style="background-color:#d0d0d0;"><center><strong>1 TB</strong>
+</center></td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K DCI <br><br>
+(4096 x 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+59.94 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">8 min.</td>
+<td style="text-align:center;">34 min.</td>
+<td style="text-align:center;">2 hr. 13 min.</td>
+<td style="text-align:center;">1000 Mbps<br><br>
+7164 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">24 min.</td>
+<td style="text-align:center;">1 hr. 39 min.</td>
+<td style="text-align:center;">6 hr. 30 min.</td>
+<td style="text-align:center;">340 Mbps<br><br>
+2443 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;">29.97 fps<br><br>
+24.00 fps<br><br>
+23.98 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">49 min.</td>
+<td style="text-align:center;">3 hr. 18 min.</td>
+<td style="text-align:center;">12 hr. 57 min.</td>
+<td style="text-align:center;">170 Mbps<br><br>
+1227 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K DCI
+cropped <br><br>(4096 x 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+59.94 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">8 min.</td>
+<td style="text-align:center;">34 min.</td>
+<td style="text-align:center;">2 hr. 13 min.</td>
+<td style="text-align:center;">1000 Mbps<br><br>
+7164 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB
+</center></td>
+<td style="text-align:center;">24 min.</td>
+<td style="text-align:center;">1 hr. 39 min.</td>
+<td style="text-align:center;">6 hr. 30 min.</td>
+<td style="text-align:center;">340 Mbps<br><br>
+2443 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;"><center>
+29.97 fps<br><br>
+24.00 fps<br><br>
+23.98 fps
+</center></td>
+<td style="background-color:#bfbfbf;"><center>
+ALL-I
+</center></td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB
+</center></td>
+<td style="text-align:center;">49 min.</td>
+<td style="text-align:center;">3 hr. 18 min.</td>
+<td style="text-align:center;">12 hr. 57 min.</td>
+<td style="text-align:center;">170 Mbps<br><br>
+1227 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="4" style="background-color:#bfbfbf;"><center><strong>4K UHD <br><br>(3840 X 2160)</strong></center></td>
+<td rowspan="2" style="background-color:#bfbfbf;">59.94 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">8 min.</td>
+<td style="text-align:center;">34 min.</td>
+<td style="text-align:center;">2 hr. 13 min.</td>
+<td style="text-align:center;">1000 Mbps<br><br>
+7164 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">24 min.</td>
+<td style="text-align:center;">1 hr. 39 min.</td>
+<td style="text-align:center;">6 hr. 30 min.</td>
+<td style="text-align:center;">340 Mbps<br><br>
+2443 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;">29.97 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">49 min.</td>
+<td style="text-align:center;">3 hr. 18 min.</td>
+<td style="text-align:center;">12 hr. 57 min.</td>
+<td style="text-align:center;">170 Mbps<br><br>
+1227 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="6" style="background-color:#bfbfbf;"><center><strong>Full HD <br><br>
+(1920 x 1080)</strong></center></td>
+<td style="background-color:#bfbfbf;">119.9 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">18 min.</td>
+<td style="text-align:center;">1 hr. 12 min.</td>
+<td style="text-align:center;">4 hr. 42 min.</td>
+<td style="text-align:center;">470 Mbps<br><br>
+3373 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#bfbfbf;">59.94 fps</td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">49 min.</td>
+<td style="text-align:center;">3 hr. 18 min.</td>
+<td style="text-align:center;">12 hr. 57 min.</td>
+<td style="text-align:center;">170 Mbps<br><br>
+1227 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">1 hr. 33 min.</td>
+<td style="text-align:center;">6 hr. 12 min.</td>
+<td style="text-align:center;">24 hr. 16 min.</td>
+<td style="text-align:center;">90 Mbps<br><br>
+655 MB/min.</td>
+</tr>
+<tr>
+<td rowspan="3" style="background-color:#bfbfbf;"><center>
+29.97 fps
+</center></td>
+<td style="background-color:#bfbfbf;">ALL-I</td>
+<td style="text-align:center;">1 hr. 2 min.</td>
+<td style="text-align:center;">4 hr. 9 min.</td>
+<td style="text-align:center;">16 hr. 16 min.</td>
+<td style="text-align:center;">135 Mbps<br><br>
+977 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;">IPB</td>
+<td style="text-align:center;">3 hr. 3 min.</td>
+<td style="text-align:center;">12 hr. 13 min.</td>
+<td style="text-align:center;">47 hr. 45 min.</td>
+<td style="text-align:center;">45 Mbps<br><br>
+333 MB/min.</td>
+</tr>
+<tr>
+<td style="background-color:#bfbfbf;"><center>
+IPB <br><br> (Light)
+</center></td>
+<td style="text-align:center;">7 hr. 47 min.</td>
+<td style="text-align:center;">31 hr. 9 min.</td>
+<td style="text-align:center;">121 hr. 41 min.</td>
+<td style="text-align:center;">18 Mbps<br><br>
+131 MB/min.</td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<br><br><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>LCD Monitor</h3><p>
+<span class="bold_text">Type</span>
+<br>TFT color, liquid-crystal monitor</p><p>
+<span class="bold_text">Monitor Size</span>
+<br>Size: 3.2-inches (aspect ratio 3:2) <br><br>
+Diagonal: Approx. 3.15 in. / Approx. 8.01 cm <br><br>
+Width: Approx. 2.63 in. / Approx. 6.67 cm <br><br>
+Height: Approx. 1.75 in. / Approx. 4.44 cm<br><br></p><p>
+<span class="bold_text">Pixels</span>
+<br>Approx. 2.1 million dots</p><p>
+<span class="bold_text">Coverage</span>
+<br>Approx. 100% vertically and horizontally <br>
+Viewing angle: Approx. 170° vertically and horizontally</p><p>
+<span class="bold_text">Brightness Control</span>
+<br>7 levels provided (manually adjustable, in Set-up Menu)</p><p>
+<span class="bold_text">Interface Languages</span>
+<br>29 (English, German, French, Dutch, Danish, Portuguese, Finnish, Italian, Norwegian, Swedish, Spanish, Greek, Russian, Polish, Czech, Hungarian, Vietnamese, Hindi, Romanian, Ukraine, Turkish, Arabic, Thai, Simplified/Traditional Chinese, Korean, Malay, Indonesian, and Japanese)</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Playback</h3><p>
+<span class="bold_text">Display Format</span>
+<br></p><table border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:left !important;" width="100%">
+<tbody><tr>
+<td style="background-color:#d0d0d0;" width="20%"><center><strong>Single Image Display</strong>
+</center>
+</td>
+<td>
+<ul type="disc">
+<li>No information display</li> 
+<li>Basic information display</li> 
+<li>Available display items (1-10)</li> 
+<li>Detailed shooting information display <br><br>
+<ul type="circle">
+<li>Basic shooting information</li>	
+<li>Lens information and RGB histogram</li>
+<li>White balance</li>
+<li>Picture Style</li>
+<li>Color space and noise reduction</li>
+<li>Lens abberation correction</li>
+<li>Record of sent images</li>
+<li>GPS* information</li>
+<li>IPTC information</li>
+</ul>
+</li> 
+</ul></td>
+</tr>
+<tr>
+<td style="background-color:#d0d0d0;"><center><strong>Index Display</strong>
+</center></td>
+<td>
+<ul type="disc">
+<li>4-image index</li>
+<li>9-image index</li>
+<li>36-image index</li>
+<li>100-image index</li>
+</ul></td>
+</tr>
+</tbody></table>
+<br><br>
+<br><br>
+<p>* In certain countries and regions, the use of GPS may be restricted. Therefore be sure to use GPS in accordance with the laws and regulations of your country or region. Be particularly careful when traveling outside your home country. As a signal is received from GPS satellites, take sufficient measures when using in locations where the use of electronics is regulated.</p>
+<br><br>
+<br><br>
+<br><br><p></p><p>
+<span class="bold_text">Highlight Alert</span>
+<br>On the single-image display, highlight areas without any image information will blink.</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Quick Control Function </h3><p>
+<span class="bold_text">Items</span>
+<br>Frame Grab from 4K Movies: <br><br>
+</p><ul>
+<li>Individual frames in 4K movies recorded with the camera can be saved as JPEG still photos.</li>
+<li>Approx. 8.8 megapixels (4096 x 2160) or approx. 8.3 megapixels (3840 x 2160)</li>
+<li>Frame grab images cannot be resized or cropped in-camera.</li>	
+</ul><p></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Image Protection and Erase</h3><p>
+<span class="bold_text">Protection</span>
+<br>Erase protection: single image; select range; all images in folder; all images on card; all found images <br><br>
+Unprotection: all images in folder; all images on card;</p><p>
+<span class="bold_text">Erase</span>
+<br>Erase a single image, selected images, select range, all images in a folder, all images in a card or all found images.</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Direct Printing</h3><p>
+<span class="bold_text">Compatible Printers</span>
+<br>N/A (Direct printing not possible)</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>DPOF: Digital Print Order Format</h3><p>
+<span class="bold_text">DPOF</span>
+<br>Version 1.1 compatible</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Direct Image Transfer</h3><p>
+<span class="bold_text">Compatible Images</span>
+<br>JPEG, RAW/C-RAW, HEIF images, and movies <br><br>
+*Individual and multiple image files can be selected</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Customization</h3><p>
+<span class="bold_text">Custom Functions</span>
+<br>Total 38</p><p>
+<span class="bold_text">Camera User Settings</span>
+<br></p><ul>
+<li>Current camera settings can be registered to C1, C2 and C3 in Set-up Menu (called-up for shooting on top LCD panel).</li>
+<li>Automatic updating of the registered settings can be set to Enable or Diable.</li>
+</ul>
+* The saving of individual settings for still photos and movies is supported.
+<br><br><p></p><p>
+<span class="bold_text">My Menu Registration</span>
+<br>Up to six top-tier menu options and Custom Function settings can be registered. <br><br>
+Up to five My Menu tabs can be added.</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Interface</h3><p>
+<span class="bold_text">USB Terminal</span>
+<br>USB Type-C <br><br>
+SuperSpeed Plus USB (USB 3.1 Gen 2) <br><br>
+</p><ul>
+<li>For computer communication</li>
+</ul><p></p><p>
+<span class="bold_text">Video Out Terminal</span>
+<br>Type C (Resolution switches automatically) / CEC not compatible.
+</p><ul>
+<li>Images will not be displayed unless [NTSC] or [PAL] is properly set according to the video system of the TV set.
+</li>
+</ul><p></p><p>
+<span class="bold_text">Extension System Terminal</span>
+<br>Wireless File Transmitter WFT-E9 <br><br>
+* WFT-E6 and WFT-E8 are not supported.</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Power Source</h3><p>
+<span class="bold_text">Battery</span>
+<br>Battery Pack LP-E19 (supplied)</p><p>
+<span class="bold_text">Number of Shots</span>
+<br></p><p>Approx. (Based on CIPA testing standards)</p>
+<br>
+<table width="100%" border="1" cellpadding="10" cellspacing="0" dir="ltr" style="background-color:#fff; padding: 10px !important; text-align:center !important;">
+<tbody><tr>
+<td style="background-color:#bfbfbf;"><center><strong>Shooting Method</strong></center></td>
+<td style="background-color:#bfbfbf;"><center><strong>Battery</strong></center></td>
+<td style="background-color:#bfbfbf;"><center><strong>Temperature</strong></center></td>
+<td style="background-color:#bfbfbf;"><center><strong>Possible Shots</strong></center></td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#D7D7D7;"><center>Viewfinder shooting</center></td>
+<td rowspan="4"><center>Battery Pack <br> 
+LP-E19</center></td>
+<td>At 73°F/23°C</td>
+<td>2850</td>
+</tr>
+<tr>
+<td>At 32°F/0°C</td>
+<td>2360</td>
+</tr>
+<tr>
+<td rowspan="2" style="background-color:#D7D7D7;"><center>
+Live View shooting
+</center></td>
+<td>At 73°F/23°C</td>
+<td>610</td>
+</tr>
+<tr>
+<td><center>
+At 32°F/0°C
+</center></td>
+<td><center>
+530
+</center></td>
+</tr>
+</tbody></table>
+<br>
+<br>
+<br><p></p><p>
+<span class="bold_text">Battery Check</span>
+<br>4-level remaining charge display icon in viewfinder, top LCD panel, and LCD screen (when shooting info displayed)
+</p><ul>
+<li>Battery info. in Set-up Menu — % charge remaining, shutter count on current charge, and recharge performance displayed</li>
+</ul><p></p><p>
+<span class="bold_text">Power Saving</span>
+<br>Power turns off after the set time (1, 2, 4, 8, 15 or 30 min.) of non-operation elapses.</p><p>
+<span class="bold_text">Date/Time Battery</span>
+<br>Rechargeable built-in secondary battery <br><br>
+</p><ul>
+<li>Maintains date/time for approx. 1 month, if primary battery pack removed or depleted</li>
+<li>Recharged by installation of charged LP-E19</li>
+<li>Recharging time approx. 8 hours</li>
+</ul><p></p><p>
+<span class="bold_text">Start-up Time</span>
+<br>Approx. 0.2 sec. (Based on CIPA testing standards)</p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Dimensions and Weight</h3><p>
+<span class="bold_text">Dimensions (W x H x D)</span>
+<br>Based on CIPA guidelines: Approx. 6.22 x 6.60 x 3.25 in. / 158.0 x 167.6 x 82.6mm (W x H x D)</p><p>
+<span class="bold_text">Weight</span>
+<br>Based on CIPA guidelines: <br><br>
+Approx. 44.09 oz. / 1250g (Body only) <br><br>
+Approx. 50.80 oz. / 1440g ( Including battery, and memory card) <br><br>
+* Weighed without body cap and eyecup.<br><br></p><h3 class="spec1_header">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>Operating Environment</h3><p>
+<span class="bold_text">Working Temperature Range</span>
+<br>32-113°F/0-45°C</p><p>
+<span class="bold_text">Working Humidity Range</span>
+<br>85% or less</p></div><div class="content_container_footer"><div class="navbar">
+<a href="javascript:goToAnchor('top');"><img src="/sys/images/buttons/back_to_top.gif" id="back_to_top" alt="Back to Top"></a>
+</div>
+</div>
+</div>
+</div>
+<!-- END Specification_Data.jspf -->
+<!-- Product Disclaimer inclusion starts -->
+<!-- Starts ProductDisclaimer.jsp -->
+<!-- Get Disclaimer from Asset URL -->
+<div class="disclaimer">
+<p> 
+<strong>Disclaimer</strong><br>
+
+<!-- Content Generated by Documentum -->
+<meta name="i_chronicle_id" content="0901e024818bbbf5">
+<meta name="i_folder_id" content="0b01e02480603354">
+<meta name="i_cabinet_id" content="0c01e024805550f7">
+<meta name="object_name" content="47760_disclaimer.html">
+<meta name="r_current_state" content="3">
+<meta name="r_version_label" content="Active">
+<meta name="r_object_type" content="dm_document">
+<meta name="r_folder_path" content="/eStore/assets/marketing/disclaimers">
+<meta name="i_full_format" content="html">
+<meta name="r_object_id" content="0901e024818bdb55">
+
+  <script>(window.BOOMR_mq=window.BOOMR_mq||[]).push(["addVar",{"rua.upush":"false","rua.cpush":"true","rua.upre":"false","rua.cpre":"false","rua.uprl":"false","rua.cprl":"false","rua.cprf":"false","rua.trans":"SJ-82107426-4f81-4ee6-a341-a3912d585272","rua.cook":"false","rua.ims":"false","rua.ufprl":"false","rua.cfprl":"false","rua.isuxp":"false","rua.texp":"norulematch"}]);</script>
+                          <script>!function(a){var e="https://s.go-mpulse.net/boomerang/",t="addEventListener";if("False"=="True")a.BOOMR_config=a.BOOMR_config||{},a.BOOMR_config.PageParams=a.BOOMR_config.PageParams||{},a.BOOMR_config.PageParams.pci=!0,e="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="SJ2D4-CJMNU-VSQTN-SAMKU-NRFV5",function(){function n(e){a.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!a.BOOMR||!a.BOOMR.version&&!a.BOOMR.snippetExecuted){a.BOOMR=a.BOOMR||{},a.BOOMR.snippetExecuted=!0;var i,_,o,r=document.createElement("iframe");if(a[t])a[t]("load",n,!1);else if(a.attachEvent)a.attachEvent("onload",n);r.src="javascript:void(0)",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="width:0;height:0;border:0;display:none;",o=document.getElementsByTagName("script")[0],o.parentNode.insertBefore(r,o);try{_=r.contentWindow.document}catch(O){i=document.domain,r.src="javascript:var d=document.open();d.domain='"+i+"';void(0);",_=r.contentWindow.document}_.open()._l=function(){var a=this.createElement("script");if(i)this.domain=i;a.id="boomr-if-as",a.src=e+"SJ2D4-CJMNU-VSQTN-SAMKU-NRFV5",BOOMR_lstart=(new Date).getTime(),this.body.appendChild(a)},_.write("<bo"+'dy onload="document._l();">'),_.close()}}(),"".length>0)if(a&&"performance"in a&&a.performance&&"function"==typeof a.performance.setResourceTimingBufferSize)a.performance.setResourceTimingBufferSize();!function(){if(BOOMR=a.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var e="true"=="true"?1:0,t="",n="ilafqavydrxdsygtt2pq-f-9b68e432b-clientnsv4-s.akamaihd.net",i={"ak.v":"31","ak.cp":"108929","ak.ai":parseInt("248681",10),"ak.ol":"0","ak.cr":27,"ak.ipv":4,"ak.proto":"h2","ak.rid":"1270b868","ak.r":35138,"ak.a2":e,"ak.m":"b","ak.n":"essl","ak.bpcip":"66.192.88.0","ak.cport":62349,"ak.gh":"184.28.110.53","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.csrc":"-","ak.acc":"","ak.t":"1624481439","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==JnIanLNlr5d+gHd1fGzY9JOREH/JPUOurZcsHmIg/hxp8EsD783RMFo/lLrEYNpZwE1sgU5MLtKeCFXMMazuPYNM1Uzej6lCe318fVG5s0IKOu63r4Lz+bm1kIu/AcYmGDy6HAX2pDIsOXL0kllA4sGXbSVnrP0oms2jdC2xiaZDJnqG0Puv6tuBD8oNZflhAVCWS0D56+9V+PQx9Rgw5thmEEe0LduiTR73WmwMRiwA5FzgXJoKJbVvxfc+0hGohEBo1CcaOBNvUaKH15oY1o2ABd9gYtjdIwsgRkNmY+JDwmxQNkQ93UFOydJQR+m2zztXMjRPVycGnNTHTTU51X2RDO54CRDANAPRLgbc8COzBNNCAu2JnYI0bimL4gDZJ7GIkxjK5rhs2TW9HeIEGdc7te/1uL2P8yZ5zH+WerE=","ak.pv":"44","ak.dpoabenc":""};if(""!==t)i["ak.ruds"]=t;var _={i:!1,av:function(e){var t="http.initiator";if(e&&(!e[t]||"spa_hard"===e[t]))i["ak.feo"]=void 0!==a.aFeoApplied?1:0,BOOMR.addVar(i)},rv:function(){var a=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.r","ak.acc","ak.t"];BOOMR.removeVar(a)}};BOOMR.plugins.AK={akVars:i,akDNSPreFetchDomain:n,init:function(){if(!_.i){var a=BOOMR.subscribe;a("before_beacon",_.av,null,null),a("onbeacon",_.rv,null,null),_.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script>
+*<sup>1</sup> Intelligent Tracking and Recognition.
+<br><br>
+* For still images.
+<br><br>
+** Available AF positions may decrease when shooting with AF cropping or in movie mode, or depending on camera settings or lens attached.
+<br><br>
+*** Compatible with iOS® versions 9.3/10.3/11.2-11.4/12.4/13.2, Android™ smartphone and tablet versions 5.0/5.1/6.0/7.0/7.1/8.0/8.1/9.0/10.0. Data charges may apply with the download of the free Canon Camera Connect app. This app helps enable you to upload images to social media services. Please note that image files may contain personally identifiable information that may implicate privacy laws. Canon dis-claims and has no responsibility for your use of such images. Canon does not obtain, collect or use such images or any information included in such images through this app.
+<br><br>
+^ Compatible with select smartphone and tablet devices (Android™ version 5.0 or later and the following iOS® devices: iPhone 4s or later, iPad 3rd gen. or later, iPod Touch 5th gen. or later) equipped with Blue-tooth® version 4.1 or later and the Camera Connect App Ver. 2.5.10. This application is not guaranteed to operate on all listed devices, even if minimum requirements are met.
+<br><br>
+^^ In certain countries and regions, the use of GPS may be restricted. Therefore, be sure to use GPS in accordance with the laws and regulations of your country or region. Be particularly careful when traveling out-side your home country. As a signal is received from GPS satellites, take sufficient measure when using in locations where the use of electronics are regulated.
+<br>
+</p> 
+</div>
+<!-- Ends ProductDisclaimer.jsp -->
+<!-- Product Disclaimer inclusion ends -->
+<!-- END Specification.jsp -->
+<!-- END PDPTabs.jsp -->
+</wcf:usebean></div>
