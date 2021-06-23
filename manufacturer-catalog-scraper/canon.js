@@ -167,12 +167,23 @@ const self = {
                     */
 
                     // features in tab 2
-                    
+                    const tab2 = await self.page.$('div#tab2')
+                    await tab2.click() 
+                    await self.page.waitForSelector('div[aria-labelledby=tab2]')
 
+                    let rawFeatures = await self.page.$$eval('div[aria-labelledby=tab2]', texts => { 
+                        texts = texts.map(el => el.innerText.split('\n\n'))
+                        return texts
+                    })
 
+                    let features = []
+                    for (var i = 0; i < rawFeatures[0].length; i++) {
+                        if (rawFeatures[0][i] != '') { 
+                            features.push(rawFeatures[0][i].replace('\n', ''))
+                        }
+                    }
+                
                     // specs in tab 3
-
-
                     /* 
                         Save specs in formatted PDF file specs.pdf,
                         TODO: figure out how this will be stored on the server
@@ -196,7 +207,7 @@ const self = {
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: 'main.css'})
                         await (await page).pdf({ 
-                            path: 'specs.pdf',
+                            path: `${self.dataSource} ${productName} specs.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
@@ -218,14 +229,18 @@ const self = {
                         productSKU: productSKU,
                         productPrice: productPrice,
                         images: images,
-                        overview: overview
+                        overview: overview,
+                        features: features
 
                     }
 
                     console.log(metadata)
 
+                    // write data to file 
+                    fs.writeFileSync(`${productName}.json`, JSON.stringify(metadata))
+
                     console.log('Done')
-                    
+
                     // close browser and resolve the promise once finished
                     self.browser.close() 
                     return resolve(html)
