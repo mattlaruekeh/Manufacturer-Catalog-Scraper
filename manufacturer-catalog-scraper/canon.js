@@ -1,13 +1,20 @@
 /* 
     Load in common functions and variables
 */
-const { text } = require('cheerio/lib/api/manipulation');
 const COMMON = require('./common');
 const puppeteer = COMMON.puppeteer
 const cheerio = COMMON.cheerio
 const chalk = COMMON.chalk
+const jspdf = COMMON.jspdf
+const fs =  COMMON.fs
+const html2canvas = COMMON.html2canvas
+const jsdom = COMMON.jsdom
+const { JSDOM } = jsdom;
 const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
+
+
+
 
 const self = {
     dataSource: 'Canon',
@@ -55,16 +62,28 @@ const self = {
 
         return new Promise(async (resolve, reject) => { 
             self.browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
+                args: [`--window-size=${1920},${1080}`] // new option
             });
             self.page = await self.browser.newPage();
+            
+            // change size of window
+            await self. page.setViewport({
+
+                width: 1920,
+            
+                height: 1080
+            
+            })
+            
         
             //turns request interceptor on
             await self.page.setRequestInterception(true);
         
             //if the page makes a  request to a resource type of image or stylesheet then abort that request
             self.page.on('request', request => {
-                if (request.resourceType() === 'image' || request.resourceType() === 'stylesheet')
+                // to block stylesheets as well add request.resourceType() === 'stylesheet'
+                if (request.resourceType() === 'image')
                     request.abort();
                 else
                     request.continue();
@@ -100,6 +119,7 @@ const self = {
                     self.content = await self.page.content();
                     let $ = cheerio.load(self.content);
                     let html = $.html()
+                    global.document = new JSDOM(html).window.document; 
                     let url = self.page.url()
                     console.log("Got the html");
 
@@ -125,7 +145,6 @@ const self = {
 
                     let productPrice = $('span.final_price').text().trim().replace('$', '').replace(',', '')
 
-
                     let images = await self.page.$$eval('div.pdpImageCarosel > a > img', images => { 
                         // get the image source 
                         images = images.map(el => el.src)
@@ -134,14 +153,62 @@ const self = {
                     
                     let overview = await self.page.$$eval('div[aria-labelledby=tab1] > div.content p', texts => { 
                         texts = texts.map(el => el.innerText.trim())
-
-                        
                         return texts
                     })
                     
                     // filter out null items and disclaimer text
                     overview = overview.filter(item => !(item.includes('Disclaimer')))
                     overview = overview.filter(item => item != '')
+                    
+
+                    /* 
+                        TODO: Potentially get information from the features and specs tab, 
+                        have to check with Ken about what he wants
+                    */
+
+                    // features in tab 2
+                    
+
+
+                    // specs in tab 3
+
+
+                    /* 
+                        Save specs in formatted PDF file specs.pdf,
+                        TODO: figure out how this will be stored on the server
+                        and how to send the PDF to be stored and retrieved
+                    */
+                    
+                    const tab3 = await self.page.$('div#tab3')
+                    await tab3.click()
+                    await self.page.waitForTimeout(2000)
+
+                    let specsContent = $('div[aria-labelledby=tab3]').html()
+                    fs.writeFileSync('specsContent.txt', specsContent)
+
+                    try { 
+                        console.log('Printing to pdf')
+                        let data = fs.readFileSync("./specsContent.txt", "utf-8");
+                        const browser = await puppeteer.launch();
+                        const page = browser.newPage();
+                
+                        await (await page).setContent(data);
+                        await (await page).emulateMediaType('screen');
+                        await (await page).addStyleTag({ path: 'main.css'})
+                        await (await page).pdf({ 
+                            path: 'specs.pdf',
+                            format: 'A4',
+                            printBackground: true,
+                            margin: {top: '35px', left: '35px', right: '35px'}
+                        })
+                
+                        console.log('Done printing to pdf')
+                        await browser.close() 
+                       
+                
+                    } catch (e) { 
+                        console.log(e)
+                    }
 
                     const metadata = { 
                         dateScraped: dateScraped,
@@ -157,7 +224,8 @@ const self = {
 
                     console.log(metadata)
 
-
+                    console.log('Done')
+                    
                     // close browser and resolve the promise once finished
                     self.browser.close() 
                     return resolve(html)
