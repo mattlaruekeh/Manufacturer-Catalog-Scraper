@@ -14,8 +14,6 @@ const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
 
 
-
-
 const self = {
     dataSource: 'Canon',
     productLinks: [],
@@ -207,7 +205,7 @@ const self = {
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: 'main.css'})
                         await (await page).pdf({ 
-                            path: `${self.dataSource} ${productName} specs.pdf`,
+                            path: `./data/PDF/${self.dataSource} ${productName} specs.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
@@ -237,7 +235,7 @@ const self = {
                     console.log(metadata)
 
                     // write data to file 
-                    fs.writeFileSync(`${productName}.json`, JSON.stringify(metadata))
+                    fs.writeFileSync(`./data/JSON/${self.dataSource} ${productName}.json`, JSON.stringify(metadata))
 
                     console.log('Done')
 
