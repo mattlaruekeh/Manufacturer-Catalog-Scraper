@@ -119,6 +119,7 @@ const self = {
                     let html = $.html()
                     global.document = new JSDOM(html).window.document;
                     let url = self.page.url()
+                    let title = await self.page.title()
 
                     // let's start parsing! 
 
@@ -175,17 +176,37 @@ const self = {
                         Generate PDF of specs
                     */
 
-                    // nkn-resp-container-standard full-specs
+                    let specsContent = $('div.full-specs').html()
+                    let prodTitle = title.split('|')[0]
 
-                    
+                    let fileName = `${prodTitle}Specs`
+                    fs.writeFileSync(`./data/TXT/${fileName}.txt`, specsContent)
+                    try { 
+                        console.log("Printing specs content to PDF")
+                        let data = fs.readFileSync(`./data/TXT/${fileName}.txt`, "utf-8");
+                        const browser = await puppeteer.launch() 
+                        const page = browser.newPage()
+
+                        await (await page).setContent(data);
+                        await (await page).emulateMediaType('screen');
+                        await (await page).addStyleTag({ path: 'nikon.css'})
+                        await (await page).pdf({ 
+                            path: `./data/PDF/${fileName}.pdf`,
+                            format: 'A4',
+                            printBackground: true,
+                            margin: {top: '35px', left: '35px', right: '35px'}
+                        })
+                
+                        console.log('Done printing to pdf')
+                        await browser.close() 
+
+                    } catch (e) { 
+                        console.log(e)
+                    }
                     console.log('Done')
                     await self.browser.close()
                     return resolve(html)
-
-
-
                 }
-
 
             } catch (e) {
                 console.log(e)
@@ -209,7 +230,6 @@ const self = {
         let images = json.image
 
         console.log(images)
-
 
         let sku = json.sku
         let gtin12 = json.gtin12
