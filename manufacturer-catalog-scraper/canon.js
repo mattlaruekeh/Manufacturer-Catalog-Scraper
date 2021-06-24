@@ -66,7 +66,7 @@ const self = {
             self.page = await self.browser.newPage();
             
             // change size of window
-            await self. page.setViewport({
+            await self.page.setViewport({
 
                 width: 1920,
             
