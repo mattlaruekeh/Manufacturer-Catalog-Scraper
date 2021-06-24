@@ -100,14 +100,13 @@ const self = {
         SCRAPING FUNCTION: Scrape individual product page for all the info we want to collect
     */
     scrapePage: async() => {
-        console.log("Going to website") 
 
         return new Promise(async (resolve, reject) => { 
             try { 
                 await self.initPuppeteer() 
                 console.log(self.productLinks[0].all_links)
                 let goTo = 'https://shop.usa.canon.com' + self.productLinks[0].all_links[0]
-                console.log(`Going to url ${goTo}`)
+                console.log(`Going to individual product page ${goTo}`)
                 // make sure browser is initialized 
                 if (self.browser) { 
                     // open up the page
@@ -158,7 +157,6 @@ const self = {
                     overview = overview.filter(item => !(item.includes('Disclaimer')))
                     overview = overview.filter(item => item != '')
                     
-
                     /* 
                         TODO: Potentially get information from the features and specs tab, 
                         have to check with Ken about what he wants
@@ -193,19 +191,19 @@ const self = {
                     await self.page.waitForTimeout(2000)
 
                     let specsContent = $('div[aria-labelledby=tab3]').html()
-                    fs.writeFileSync('specsContent.txt', specsContent)
-
+                    let fileName = `${self.dataSource} ${productName} Specs`
+                    fs.writeFileSync(`./data/TXT/${fileName}.txt`, specsContent)
                     try { 
                         console.log('Printing to pdf')
-                        let data = fs.readFileSync("./specsContent.txt", "utf-8");
+                        let data = fs.readFileSync(`./data/TXT/${fileName}.txt`, "utf-8");
                         const browser = await puppeteer.launch();
                         const page = browser.newPage();
                 
                         await (await page).setContent(data);
                         await (await page).emulateMediaType('screen');
-                        await (await page).addStyleTag({ path: 'main.css'})
+                        await (await page).addStyleTag({ path: './css/canon.css'})
                         await (await page).pdf({ 
-                            path: `./data/PDF/${self.dataSource} ${productName} specs.pdf`,
+                            path: `./data/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
@@ -235,7 +233,7 @@ const self = {
                     console.log(metadata)
 
                     // write data to file 
-                    fs.writeFileSync(`./data/JSON/${self.dataSource} ${productName}.json`, JSON.stringify(metadata))
+                    fs.writeFileSync(`./data/JSON/${fileName}.json`, JSON.stringify(metadata))
 
                     console.log('Done')
 

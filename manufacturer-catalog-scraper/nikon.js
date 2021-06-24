@@ -151,26 +151,21 @@ const self = {
                         jsonObj = JSON.parse(JSON.stringify(arr[0].innerHTML))
                     }
 
-                    try {
-                        let json = self.readJSON(jsonObj)
+                    let json = self.readJSON(jsonObj)
+                    
+                    const metadata = {
+                        dateScraped: dateScraped,
+                        dataSource: self.dataSource,
+                        url: url,
+                        productName: json.name,
+                        productSKU: json.sku,
+                        productPrice: json.price,
+                        images: json.images,
+                        overview: json.description,
+                        gtin12: json.gtin12
+                    }
 
-                        const metadata = {
-                            dateScraped: dateScraped,
-                            dataSource: self.dataSource,
-                            url: url,
-                            productName: json.name,
-                            productSKU: json.sku,
-                            productPrice: json.price,
-                            images: json.images,
-                            overview: json.description,
-                            gtin12: json.gtin12
-                        }
-
-                        console.log(metadata)
-
-                    } catch (e) {
-                        console.log(e)
-                    } // end try 
+                    console.log(metadata)
 
                     /* 
                         Generate PDF of specs
@@ -189,7 +184,7 @@ const self = {
 
                         await (await page).setContent(data);
                         await (await page).emulateMediaType('screen');
-                        await (await page).addStyleTag({ path: 'nikon.css'})
+                        await (await page).addStyleTag({ path: './css/nikon.css'})
                         await (await page).pdf({ 
                             path: `./data/PDF/${fileName}.pdf`,
                             format: 'A4',
@@ -203,6 +198,10 @@ const self = {
                     } catch (e) { 
                         console.log(e)
                     }
+
+                    // write data to file 
+                    fs.writeFileSync(`./data/JSON/${fileName}.json`, JSON.stringify(metadata))
+
                     console.log('Done')
                     await self.browser.close()
                     return resolve(html)
