@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+body { 
+    font-family: Open Sans, Helvetica, Arial, sans-serif;
+}
+
+ul { 
+    list-style: none;
+    padding: 10px;
+}
+
+li span.sub-group { 
+    
+    color: #232b2b;
+    font-size: larger;
+    font-weight: bolder;
+
+    /* Can't figure out how to add margin to this? */
+    margin-top: 50em;
+
+}
+
+li { 
+    margin: 0 0 0.28em 0;
+}
+
+
+.block-head { 
+    font-weight: bold;
+    font-size: larger;
+    color: red;
+    list-style: none;
+    list-style-type: none;
+}
+

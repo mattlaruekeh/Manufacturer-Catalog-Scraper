@@ -59,7 +59,7 @@ const self = {
                     console.log(self.productLinks)
                     console.log(self.productLinks.length)
 
-                    fs.writeFileSync(`./data/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
+                    fs.writeFileSync(`./data/Panasonic/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
                     return resolve(urls)
                 })
             } catch (e) {
@@ -129,7 +129,8 @@ const self = {
                     // parsing time 
                     let dateScraped = new Date().toISOString().slice(0, 10)
 
-                    let productName = $('.pdp-prod-name').text()
+                    var productName = $('h1.product-name').text()
+                    var productName = productName.split('\n').join('');
 
                     let productSKU = $('span[itemprop=productID]').text()
                     
@@ -141,15 +142,15 @@ const self = {
                         return images
                     })
 
-                    // all images on the page including the copy
+                    // all images on the page including the copy images
                     images = images.filter(item => (item.includes('/product/images/')))
 
-                    // all product images
+                    // just product images
                     let productImages = []
                     productImages = images.filter(item => (item.includes('ALT')))
                     let editedImages = []
                     
-                    // resize the images from 80 x 80 to 400 x 400 
+                    // resize the product images from 80 x 80 to 400 x 400 
                     for (var i = 0; i< productImages.length; i++) { 
                         if (productImages[i].includes('80')) { 
                             const result = productImages[i].split('80').join('400');
@@ -157,14 +158,72 @@ const self = {
                         }
                     }
                     
-                    let rawfeatures = $('span.feature-content').text().split('\n\t')
-                    rawfeatures = rawfeatures.filter(item => item != '')
-                    let features = []
+                    // bullet point overview
+                    let rawOverview = $('span.feature-content').text().split('\n\t')
+                    rawOverview = rawOverview.filter(item => item != '')
+                    let overview = []
+                    
+                    // remove new lines 
+                    for (var i = 0; i < rawOverview.length; i++) { 
+                        const result = rawOverview[i].split('\n').join('');
+                        overview.push(result)
+                    }
 
-                    for (var i = 0; i < rawfeatures.length; i++) { 
-                        const result = rawfeatures[i].split('\n').join('');
+                    // get more features copy
+                    let rawFeatures = await self.page.$$eval('.ads-container-1', features => { 
+                        features = features.map(elm => elm.innerText)
+                        return features
+                    })
+                    console.log(rawFeatures)
+                    let features = []
+                    for (var i = 0; i < rawFeatures.length; i++) { 
+                        const result = rawFeatures[i].split('\n').join('');
                         features.push(result)
                     }
+
+                    // generate PDF of specs 
+                    const specs = await self.page.$('a.more-specification-link')
+                    await specs.click()
+                    await self.page.waitForTimeout(2000)
+
+                    await self.page.waitForSelector('.specification-holder-ul')
+                    let specsContent = $('.specification-holder-ul').html()
+                    let fileName = `${self.dataSource} ${productName} Specs`
+
+                    fs.writeFileSync(`./data/Panasonic/TXT/${fileName}.txt`, specsContent)
+                    try { 
+                        console.log('Printing to pdf')
+                        var data = fs.readFileSync(`./data/Panasonic/TXT/${fileName}.txt`, "utf-8");
+                        // show elements that should be shown but have a css style of no display
+                        data = data.split('style="display: none;"').join('');
+                        data = data.split('<i>').join('');
+                        data = data.split('</i>').join('');
+                        /* 
+                            Doesn't print bullet points in test environment, but
+                            prints the bullet point here? WHY?!
+                        */
+                        data = data.split('style="display: list-item;"').join('');
+                        const browser = await puppeteer.launch();
+                        const page = browser.newPage();
+                
+                        await (await page).setContent(data);
+                        await (await page).emulateMediaType('screen');
+                        await (await page).addStyleTag({ path: './css/panasonic.css'})
+                        await (await page).pdf({ 
+                            path: `./data/Panasonic/PDF/${fileName}.pdf`,
+                            format: 'A4',
+                            printBackground: true,
+                            margin: {top: '35px', left: '35px', right: '35px'}
+                        })
+                
+                        console.log('Done printing to pdf')
+                        await browser.close() 
+                       
+                
+                    } catch (e) { 
+                        console.log(e)
+                    }
+                    
 
                     const metadata = { 
                         dateScraped: dateScraped,
@@ -174,11 +233,14 @@ const self = {
                         productSKU: productSKU,
                         productPrice: productPrice,
                         images: editedImages,
-                        // overview: overview,
+                        overview: overview,
                         features: features
                     }
 
                     console.log(metadata)
+
+                    // write data to file 
+                    fs.writeFileSync(`./data/Panasonic/JSON/${fileName}.json`, JSON.stringify(metadata))
 
                     await self.browser.close()
                 }
