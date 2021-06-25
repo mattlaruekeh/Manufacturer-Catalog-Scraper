@@ -43,6 +43,10 @@ const self = {
                     let urls = response.data
                     self.productLinks.push(urls)
                     console.log("Got product links")
+                    
+                    // write links to file 
+                    fs.writeFileSync(`./data/Canon/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks[0].all_links))
+                    
                     return resolve(urls) 
                 })
             } catch (error) { 
@@ -192,10 +196,10 @@ const self = {
 
                     let specsContent = $('div[aria-labelledby=tab3]').html()
                     let fileName = `${self.dataSource} ${productName} Specs`
-                    fs.writeFileSync(`./data/TXT/${fileName}.txt`, specsContent)
+                    fs.writeFileSync(`./data/Canon/TXT/${fileName}.txt`, specsContent)
                     try { 
                         console.log('Printing to pdf')
-                        let data = fs.readFileSync(`./data/TXT/${fileName}.txt`, "utf-8");
+                        let data = fs.readFileSync(`./data/Canon/TXT/${fileName}.txt`, "utf-8");
                         const browser = await puppeteer.launch();
                         const page = browser.newPage();
                 
@@ -203,7 +207,7 @@ const self = {
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: './css/canon.css'})
                         await (await page).pdf({ 
-                            path: `./data/PDF/${fileName}.pdf`,
+                            path: `./data/Canon/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
@@ -233,7 +237,7 @@ const self = {
                     console.log(metadata)
 
                     // write data to file 
-                    fs.writeFileSync(`./data/JSON/${fileName}.json`, JSON.stringify(metadata))
+                    fs.writeFileSync(`./data/Canon/JSON/${fileName}.json`, JSON.stringify(metadata))
 
                     console.log('Done')
 
