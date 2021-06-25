@@ -47,6 +47,9 @@ const self = {
                     }
                     console.log("Got product links")
                     console.log(self.productLinks)
+                    
+                    // write links to file
+                    fs.writeFileSync(`./data/Nikon/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
                     return resolve(urls)
                 })
 
@@ -175,10 +178,10 @@ const self = {
                     let prodTitle = title.split('|')[0]
 
                     let fileName = `${prodTitle}Specs`
-                    fs.writeFileSync(`./data/TXT/${fileName}.txt`, specsContent)
+                    fs.writeFileSync(`./data/Nikon/TXT/${fileName}.txt`, specsContent)
                     try { 
                         console.log("Printing specs content to PDF")
-                        let data = fs.readFileSync(`./data/TXT/${fileName}.txt`, "utf-8");
+                        let data = fs.readFileSync(`./data/Nikon/TXT/${fileName}.txt`, "utf-8");
                         const browser = await puppeteer.launch() 
                         const page = browser.newPage()
 
@@ -186,7 +189,7 @@ const self = {
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: './css/nikon.css'})
                         await (await page).pdf({ 
-                            path: `./data/PDF/${fileName}.pdf`,
+                            path: `./data/Nikon/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
@@ -200,7 +203,7 @@ const self = {
                     }
 
                     // write data to file 
-                    fs.writeFileSync(`./data/JSON/${fileName}.json`, JSON.stringify(metadata))
+                    fs.writeFileSync(`./data/Nikon/JSON/${fileName}.json`, JSON.stringify(metadata))
 
                     console.log('Done')
                     await self.browser.close()
