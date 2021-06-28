@@ -5,13 +5,14 @@ const COMMON = require('./common');
 const puppeteer = COMMON.puppeteer
 const cheerio = COMMON.cheerio
 const chalk = COMMON.chalk
-const jspdf = COMMON.jspdf
 const fs = COMMON.fs
-const html2canvas = COMMON.html2canvas
 const jsdom = COMMON.jsdom
 const { JSDOM } = jsdom;
 const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
+const DEV_BUCKET = COMMON.DEV_BUCKET
+const DEV_PROJECT_ID = COMMON.DEV_PROJECT_ID
+const DEV_PROJECT_KEY = COMMON.DEV_PROJECT_KEY
 
 const self = {
     dataSource: 'Panasonic',
@@ -60,6 +61,11 @@ const self = {
                     console.log(self.productLinks.length)
 
                     fs.writeFileSync(`./data/Panasonic/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
+
+                    // write to GCP
+                    let filename = `${self.dataSource}/productURLS/${self.dataSource}.json`
+                    COMMON.saveToGCP(DEV_BUCKET, filename, self.productLinks) 
+
                     return resolve(urls)
                 })
             } catch (e) {
@@ -130,7 +136,7 @@ const self = {
                     let dateScraped = new Date().toISOString().slice(0, 10)
 
                     var productName = $('h1.product-name').text()
-                    var productName = productName.split('\n').join('');
+                    productName = productName.split('\n').join('');
 
                     let productSKU = $('span[itemprop=productID]').text()
                     
@@ -156,6 +162,17 @@ const self = {
                             const result = productImages[i].split('80').join('400');
                             editedImages.push(result)
                         }
+                    }
+
+                    // save images to GCP
+                    for (var i = 0; i < editedImages.length; i++) {
+                        COMMON.processAndSaveImageToGCP(editedImages[i], DEV_BUCKET, `${self.dataSource}/images/${productName}/${productName} ${i}`)
+                        .then(res => {
+                        console.log(`Image saved`, res);
+                        })
+                        .catch(err => {
+                        console.log(`Image error`, err);
+                        });
                     }
                     
                     // bullet point overview
@@ -190,10 +207,14 @@ const self = {
                     let specsContent = $('.specification-holder-ul').html()
                     let fileName = `${self.dataSource} ${productName} Specs`
 
-                    fs.writeFileSync(`./data/Panasonic/TXT/${fileName}.txt`, specsContent)
+                    fs.writeFileSync(`./data/Panasonic/TXT/${fileName}.html`, specsContent)
+
+                    // save to GCP 
+                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+
                     try { 
-                        console.log('Printing to pdf')
-                        var data = fs.readFileSync(`./data/Panasonic/TXT/${fileName}.txt`, "utf-8");
+                        console.log('Printing specs content to pdf')
+                        var data = fs.readFileSync(`./data/Panasonic/TXT/${fileName}.html`, "utf-8");
                         // show elements that should be shown but have a css style of no display
                         data = data.split('style="display: none;"').join('');
                         data = data.split('<i>').join('');
@@ -209,13 +230,17 @@ const self = {
                         await (await page).setContent(data);
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: './css/panasonic.css'})
-                        await (await page).pdf({ 
+                        
+                        const pdfBuffer = await (await page).pdf({ 
                             path: `./data/Panasonic/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
                         })
-                
+            
+                        // save PDF to GCP 
+                        COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
+
                         console.log('Done printing to pdf')
                         await browser.close() 
                        
@@ -241,6 +266,9 @@ const self = {
 
                     // write data to file 
                     fs.writeFileSync(`./data/Panasonic/JSON/${fileName}.json`, JSON.stringify(metadata))
+
+                    // save JSON to GCP 
+                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${fileName}.json`, metadata)
 
                     await self.browser.close()
                 }
