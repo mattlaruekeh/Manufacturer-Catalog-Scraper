@@ -5,9 +5,10 @@ const SONY = require('./sony')
 
 const app = async () => { 
 
-    // await CANON.app();
-    await NIKON.app();
+    await CANON.app();
+    // await NIKON.app();
     // await PANASONIC.app();
+    // await SONY.app();
 
 }
 
