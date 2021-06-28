@@ -12,6 +12,9 @@ const jsdom = COMMON.jsdom
 const { JSDOM } = jsdom;
 const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
+const DEV_BUCKET = COMMON.DEV_BUCKET
+const DEV_PROJECT_ID = COMMON.DEV_PROJECT_ID
+const DEV_PROJECT_KEY = COMMON.DEV_PROJECT_KEY
 
 const self = {
     dataSource: 'Nikon',
@@ -50,6 +53,11 @@ const self = {
                     
                     // write links to file
                     fs.writeFileSync(`./data/Nikon/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
+
+                    // write to GCP
+                    let filename = `${self.dataSource}/productURLS/${self.dataSource}.json`
+                    COMMON.saveToGCP(DEV_BUCKET, filename, self.productLinks) 
+
                     return resolve(urls)
                 })
 
@@ -67,7 +75,7 @@ const self = {
 
         return new Promise(async (resolve, reject) => {
             self.browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 args: [`--window-size=${1920},${1080}`]
             })
             self.page = await self.browser.newPage();
@@ -177,8 +185,24 @@ const self = {
                     let specsContent = $('div.full-specs').html()
                     let prodTitle = title.split('|')[0]
 
+                    // save images to GCP
+                    let images = metadata.images
+                    for (var i = 0; i < images.length; i++) {
+                        COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, `${self.dataSource}/images/${prodTitle}/${prodTitle} ${i}`)
+                        .then(res => {
+                        console.log(`Image saved`, res);
+                        })
+                        .catch(err => {
+                        console.log(`Image error`, err);
+                        });
+                    }
+
                     let fileName = `${prodTitle}Specs`
                     fs.writeFileSync(`./data/Nikon/TXT/${fileName}.txt`, specsContent)
+
+                    // save to GCP 
+                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+
                     try { 
                         console.log("Printing specs content to PDF")
                         let data = fs.readFileSync(`./data/Nikon/TXT/${fileName}.txt`, "utf-8");
@@ -188,12 +212,15 @@ const self = {
                         await (await page).setContent(data);
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: './css/nikon.css'})
-                        await (await page).pdf({ 
+                        const pdfBuffer = await (await page).pdf({ 
                             path: `./data/Nikon/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
                         })
+
+                        // save PDF to GCP 
+                        COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
                 
                         console.log('Done printing to pdf')
                         await browser.close() 
@@ -204,6 +231,9 @@ const self = {
 
                     // write data to file 
                     fs.writeFileSync(`./data/Nikon/JSON/${fileName}.json`, JSON.stringify(metadata))
+
+                    // save JSON to GCP 
+                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${fileName}.json`, metadata)
 
                     console.log('Done')
                     await self.browser.close()
