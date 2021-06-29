@@ -92,6 +92,13 @@ const self = {
 
                     console.log(chalk.blue("Got product links"))
 
+                    // write links to file
+                    fs.writeFileSync(`./data/${self.dataSource}/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
+
+                    // write to GCP
+                    let filename = `${self.dataSource}/productURLS/${self.dataSource}.json`
+                    COMMON.saveToGCP(DEV_BUCKET, filename, self.productLinks) 
+
                     await self.browser.close()
                     return resolve(self.productLinks)
                 }
@@ -129,9 +136,7 @@ const self = {
             try {
                 await self.initPuppeteer()
                 // goes to the first product link, need to loop through all still
-
                 let url = self.productLinks[0][0]
-                let goTo = `https://app.scrapingbee.com/api/v1/?api_key=0DVEOB0YEL5KEQL6ZCGTT6AB4WK1ZB6DH2RV6E6IIXG0060I0UDE7T85YH201NWAGAJ1GPDJSE4JWR74&url=${url}`
 
                 console.log(chalk.green(`Going to ${url}`))
 
@@ -149,26 +154,29 @@ const self = {
 
                 let dateScraped = new Date().toISOString().slice(0, 10)
                 
-                // await self.page.waitForSelector('.app-custom-product-intro')
+                // basic product info
                 let sku = await self.page.$eval('#PDPOveriewLink > div > div > div > div.col-sm-5 > cx-page-slot.d-flex.Summary.has-components > app-custom-product-intro > div > h1 > span', el => el.innerText)
                 let name = await self.page.$eval('#PDPOveriewLink > div > div > div > div.col-sm-5 > cx-page-slot.d-flex.Summary.has-components > app-custom-product-intro > div > p > p', el => el.innerText)
                 let price = await self.page.$eval('div.d-flex.justify-content-between.align-items-center.mb-4 > div', el => el.innerText)
                 
-                // create filter to only look for product images
-                let imageLookup = sku.split('/')[0]
+                // get all images from the page
                 let images = await self.page.$$eval('img', images => { 
                     // get the image source 
                     images = images.map(el => el.src)
                     return images
                 })
 
+                // create filter to only look for product images
+                let imageLookup = sku.split('/')[0]
                 images = images.filter(item => (item.includes(imageLookup)))
 
+                // bullet point list
                 let overview = await self.page.$$eval('div.pdp-summary-highlights__content > ul > li', texts => { 
                     texts = texts.map(el => el.innerText.trim())
                     return texts
                 })
 
+                // longer, more descriptive copy
                 let rawFeatures = await self.page.$$eval('.features-common', texts => { 
                     texts = texts.map(el => el.innerText.trim())
                     return texts
@@ -184,30 +192,37 @@ const self = {
                     }
                 }
 
-
+                // json object created
                 const metadata = {
-                    dataSource: self.dataSource,
                     dateScraped: dateScraped,
-                    name: name, 
-                    sku: sku,
-                    price: price,
+                    dataSource: self.dataSource,
+                    url: url,
+                    productName: name, 
+                    productSKU: sku,
+                    productPrice: price,
                     images: images,
                     overview: overview,
-                    features: rawFeatures
+                    features: features
                 }
 
                 console.log(metadata)
 
                 // write data to file 
                 fs.writeFileSync(`./data/${self.dataSource}/JSON/${name}.json`, JSON.stringify(metadata))
+
+                // save JSON to GCP 
+                COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${name}.json`, JSON.stringify(metadata))
                 
                 // specs
                 const specsTab = await self.page.$('#PDPSpecificationsLink > cx-page-slot.PDPSpecificationsSlot.has-components > app-product-specification > div > div > div.d-flex.justify-content-center > button')
                 await specsTab.click() 
-                let specsContent = await self.page.evaluate(() => document.querySelector('div.full-specifications').innerHTML);
+                let specsContent = await self.page.evaluate(() => document.querySelector('div.full-specifications__specifications-list').innerHTML);
                 let fileName = `${self.dataSource} ${name} Specs`
 
                 fs.writeFileSync(`./data/${self.dataSource}/TXT/${fileName}.html`, specsContent)
+
+                // save specs html to GCP 
+                COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
 
                 try { 
                     console.log('Printing to pdf')
@@ -217,7 +232,7 @@ const self = {
             
                     await (await page).setContent(data);
                     await (await page).emulateMediaType('screen');
-                    await (await page).addStyleTag({ path: './css/canon.css'})
+                    await (await page).addStyleTag({ path: './css/sony.css'})
 
                     const pdfBuffer = await (await page).pdf({ 
                         path: `./data/${self.dataSource}/PDF/${fileName}.pdf`,
@@ -226,8 +241,23 @@ const self = {
                         margin: {top: '35px', left: '35px', right: '35px'}
                     })
 
+                    // save PDF to GCP 
+                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
             
                     console.log('Done printing to pdf')
+
+                    // save images to GCP
+                    let images = metadata.images
+                    for (var i = 0; i < images.length; i++) {
+                        COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, `${self.dataSource}/images/${name}/${name} ${i}`)
+                        .then(res => {
+                        console.log(`Image saved`, res);
+                        })
+                        .catch(err => {
+                        console.log(`Image error`, err);
+                        });
+                    }
+
                     await browser.close() 
                    
             
@@ -244,8 +274,6 @@ const self = {
                 return reject(e)
             }
         })
-
-
     },
 
     /* 
