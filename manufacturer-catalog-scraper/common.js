@@ -12,6 +12,7 @@ const self =  {
     rp: require('promise-request-retry'),
     jsdom: require('jsdom'),
     sharp: require('sharp'),
+    autoscroll: require('puppeteer-autoscroll-down'),
     SCRAPINGBEE: process.env.SCRAPINGBEE,
     DEV_PROJECT_ID: process.env.DEV_PROJECT_ID,
     DEV_PROJECT_KEY: process.env.DEV_PROJECT_KEY,
