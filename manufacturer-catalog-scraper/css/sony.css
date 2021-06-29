@@ -1,0 +1,9 @@
+body { 
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul.nav-tabs { display: none}
+
+h2.full-specifications__specifications-single-card__heading { 
+    color:red;
+}

@@ -5,13 +5,16 @@ const COMMON = require('./common');
 const puppeteer = COMMON.puppeteer
 const cheerio = COMMON.cheerio
 const chalk = COMMON.chalk
-const jspdf = COMMON.jspdf
 const fs =  COMMON.fs
-const html2canvas = COMMON.html2canvas
 const jsdom = COMMON.jsdom
-const { JSDOM } = jsdom;
+const { JSDOM } = jsdom
 const axios = COMMON.axios
+const sharp = COMMON.sharp
+const { Storage } = require('@google-cloud/storage');
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
+const DEV_BUCKET = COMMON.DEV_BUCKET
+const DEV_PROJECT_ID = COMMON.DEV_PROJECT_ID
+const DEV_PROJECT_KEY = COMMON.DEV_PROJECT_KEY
 
 
 const self = {
@@ -46,6 +49,10 @@ const self = {
                     
                     // write links to file 
                     fs.writeFileSync(`./data/Canon/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks[0].all_links))
+
+                    // write to GCP
+                    let filename = `Canon/productURLS/${self.dataSource}.json`
+                    self.saveToGCP(DEV_BUCKET, filename, self.productLinks[0]) 
                     
                     return resolve(urls) 
                 })
@@ -71,14 +78,10 @@ const self = {
             
             // change size of window
             await self.page.setViewport({
-
                 width: 1920,
-            
                 height: 1080
-            
             })
             
-        
             //turns request interceptor on
             await self.page.setRequestInterception(true);
         
@@ -151,6 +154,17 @@ const self = {
                         images = images.map(el => el.src)
                         return images
                     })
+
+                    // save image to GCP 
+                    for (var i = 0; i < images.length; i++) {
+                        self.processAndSaveImageToGCP(images[i], `Canon/images/${productName}/${productName} ${i}`)
+                        .then(res => {
+                        console.log(`Image saved`, res);
+                        })
+                        .catch(err => {
+                        console.log(`Image error`, err);
+                        });
+                    }
                     
                     let overview = await self.page.$$eval('div[aria-labelledby=tab1] > div.content p', texts => { 
                         texts = texts.map(el => el.innerText.trim())
@@ -196,7 +210,12 @@ const self = {
 
                     let specsContent = $('div[aria-labelledby=tab3]').html()
                     let fileName = `${self.dataSource} ${productName} Specs`
+
                     fs.writeFileSync(`./data/Canon/TXT/${fileName}.txt`, specsContent)
+
+                    // save to GCP 
+                    self.saveToGCP(DEV_BUCKET, `Canon/HTML/${fileName}.html`, specsContent)
+
                     try { 
                         console.log('Printing to pdf')
                         let data = fs.readFileSync(`./data/Canon/TXT/${fileName}.txt`, "utf-8");
@@ -206,12 +225,16 @@ const self = {
                         await (await page).setContent(data);
                         await (await page).emulateMediaType('screen');
                         await (await page).addStyleTag({ path: './css/canon.css'})
-                        await (await page).pdf({ 
-                            path: `./data/Canon/PDF/${fileName}.pdf`,
+
+                        const pdfBuffer = await (await page).pdf({ 
+                            // path: `./data/Canon/PDF/${fileName}.pdf`,
                             format: 'A4',
                             printBackground: true,
                             margin: {top: '35px', left: '35px', right: '35px'}
                         })
+
+                        // save PDF to GCP 
+                        self.saveToGCP(DEV_BUCKET, `Canon/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
                 
                         console.log('Done printing to pdf')
                         await browser.close() 
@@ -239,6 +262,9 @@ const self = {
                     // write data to file 
                     fs.writeFileSync(`./data/Canon/JSON/${fileName}.json`, JSON.stringify(metadata))
 
+                    // save JSON to GCP 
+                    self.saveToGCP(DEV_BUCKET, `Canon/JSON/${fileName}.json`, metadata)
+
                     console.log('Done')
 
                     // close browser and resolve the promise once finished
@@ -254,6 +280,73 @@ const self = {
         
     },
 
+    saveToGCP: async(bucketName, fileName, data, format) => { 
+
+        // create GCP storage client
+        const storage = new Storage({
+            projectId: DEV_PROJECT_ID,
+            keyFilename: DEV_PROJECT_KEY,
+        })
+
+        const bucket = storage.bucket(bucketName);    
+        const file = bucket.file(fileName)
+
+        if (format == 'pdf') { 
+            await file.save(data).then(() => 
+                console.log(`Uploaded file ${fileName} to ${bucketName}`))
+        } else { 
+            await file.save(JSON.stringify(data)).then(() => 
+                console.log(`Uploaded file ${fileName} to ${bucketName}`))
+        }
+        
+    },
+
+    processAndSaveImageToGCP: async (imageURL, fileName) => { 
+        return new Promise((resolve, reject) => { 
+            // create GCP storage client
+            const storage = new Storage({
+                projectId: DEV_PROJECT_ID,
+                keyFilename: DEV_PROJECT_KEY,
+            })
+
+            // Configure axios to receive a response type of stream, and get a readableStream of the image from the specified URL
+            axios({
+                method:'get',
+                url: imageURL,
+                responseType:'stream'
+            })
+            .then((response) => {
+
+                // Create the image manipulation function
+                var transformer = sharp()
+                .resize(300)
+                .jpeg();
+
+                gcFile = storage.bucket(DEV_BUCKET).file(fileName)
+
+                // Pipe the axios response data through the image transformer and to Google Cloud
+                response.data
+                // .pipe(transformer)
+                .pipe(gcFile.createWriteStream({
+                    resumable  : false,
+                    validation : false,
+                    contentType: "auto",
+                    metadata   : {
+                        'Cache-Control': 'public, max-age=31536000'}
+                }))
+                .on('error', (error) => { 
+                    reject(error) 
+                })
+                .on('finish', () => { 
+                    resolve(true)
+                });
+            })
+            .catch(err => {
+                reject("Image transfer error. ", err);
+            });
+        })
+    },
+   
     /* 
         APP: wrapper function to execute the tasks in order
     */
