@@ -23,9 +23,6 @@ const self = {
 
     dataSource: 'Fuji',
     productLinks: [],
-    browser: null,
-    page: null,
-    content: null,
     baseURLS: [
         'https://fujifilm-x.com/global/products/cameras/',
         'https://fujifilm-x.com/global/products/lenses/',
@@ -36,6 +33,18 @@ const self = {
         'https://fujifilm-x.com/global/products/accessories/power-supply/',
         'https://fujifilm-x.com/global/products/accessories/body-accessories/',
         'https://fujifilm-x.com/global/products/accessories/finder/'
+    ],
+    textFilter: [ 
+        'COUNTRY / REGION','©FUJIFILM Corporation.',
+        'brazil','canada','USA','china','india','indonesia','Japan',
+        'korea','malaysia','Philippines','singapore','thailand','Vietnam',
+        'austria','belgium','croatia','czechia','denmark','estonia','finland',
+        'france','germany','greece','hungary','iceland','ireland','italy','latvia',
+        'lithuania','netherlands','norway','poland','portugal','romania','russia',
+        'slovakia','slovenia','spain','sweden','switzerland','turkey','UK','ukraine',
+        'australia','global','cookies','For Business and Commercial Applications',
+        'FOLLOW US', 'LEARN MORE', 'Be Inspired', 'Velvia', 'PRO Neg. Std', 'PRO Neg. Std', 
+        '©Philipp Rathmer','Tips','Product Movie',
     ],
 
     /* 
@@ -115,12 +124,14 @@ const self = {
     },
 
     /* 
-        Main scraping function
+        Scraping function for cameras
     */
-    scrapePage: async (page) => {
+    scrapeCameraPage: async (page) => {
         let url = await page.url()
 
-        console.log(chalk.yellow(`Scraping ${url}`))
+        console.log(chalk.black.bgWhite(`Scraping ${url}`))
+
+        let productCategory = 'Camera'
 
         let dateScraped = new Date().toISOString().slice(0, 10)
 
@@ -156,20 +167,8 @@ const self = {
             return text
         })
         // filter it out
-        let textFilter = [
-            'COUNTRY / REGION', '©FUJIFILM Corporation.',
-            'brazil', 'canada', 'USA', 'china', 'india', 'indonesia', 'Japan',
-            'korea', 'malaysia', 'Philippines', 'singapore', 'thailand', 'Vietnam',
-            'austria', 'belgium', 'croatia', 'czechia', 'denmark', 'estonia', 'finland',
-            'france', 'germany', 'greece', 'hungary', 'iceland', 'ireland', 'italy', 'latvia',
-            'lithuania', 'netherlands', 'norway', 'poland', 'portugal', 'romania', 'russia',
-            'slovakia', 'slovenia', 'spain', 'sweden', 'switzerland', 'turkey', 'UK', 'ukraine',
-            'australia', 'global', 'cookies', 'For Business and Commercial Applications',
-            'FOLLOW US', 'LEARN MORE', 'Be Inspired', 'Velvia', 'PRO Neg. Std', 'PRO Neg. Std',
-            '©Philipp Rathmer', 'Tips', 'Product Movie',
-        ]
-        for (var i = 0; i < textFilter.length; i++) {
-            overview = overview.filter(el => !el.includes(textFilter[i]))
+        for (var i = 0; i < self.textFilter.length; i++) {
+            overview = overview.filter(el => !el.includes(self.textFilter[i]))
         }
         overview = overview.filter(item => item != '')
 
@@ -178,6 +177,7 @@ const self = {
             dataSource: 'Fuji',
             dateScraped: dateScraped,
             url: url,
+            productCategory: productCategory,
             productName: productName,
             productSKU: name,
             productPrice: 'Unknown',
@@ -218,6 +218,217 @@ const self = {
             await self.generatePDF(fileName),
             console.log(chalk.green(`😀 Finished scraping ${url} 😀`))
         )
+    },
+
+    /* 
+        Scraper for lense pages
+    */
+    scrapeLensePage: async (page) => { 
+        let url = await page.url()
+        let title = await page.title() 
+
+        let productCategory = 'Camera'
+    
+        var productName = ''
+    
+        console.log(chalk.bgCyan(`Scraping ${url}`))
+    
+        let dateScraped = new Date().toISOString().slice(0, 10)
+
+        // https://stackoverflow.com/questions/44301160/how-can-i-access-to-a-variable-in-try-block-in-other-try-block
+        try {
+            var productNameSelector = 'h1.elementor-headline'
+            productName = await page.$eval(productNameSelector, el => { 
+                return el.innerText
+            })
+        } catch (error) {
+            productName = title.split('|')
+            productName = productName[0]
+            // productName = 'asdjaldkjasdkahsdkjahsfkjahfkjahdkjahs'
+            console.log(error)
+        }
+    
+        // sku is not found, but I figured I would at least record the ID
+        var name = url.split('/')
+        name = name[name.length - 2]
+    
+        // get images from fancy scrolling feature
+        let images = await page.$$eval('img', images => { 
+            images = images.map(el => el.src)
+            return images
+        })
+    
+        images = images.filter(img => !(img.includes('/common/')))
+    
+        // get the PDF brochure link
+        let brochure = await page.$$eval('a', links => {
+            links = links.map(el => el.href)
+            brochure = links.filter(link => link.includes('catalogue'))
+            return brochure
+        })
+    
+        // overview 
+        let overview = await page.$$eval('p', text => {
+            text = text.map(el => el.innerText)
+            return text
+        })
+    
+        for (var i = 0; i < self.textFilter.length; i++) {
+            overview = overview.filter(el => !el.includes(self.textFilter[i]))
+        }
+        overview = overview.filter(item => item != '')
+        overview = overview.filter(item => item.length > 100)
+    
+        const metadata = {
+            dataSource: 'Fuji',
+            dateScraped: dateScraped,
+            url: url,
+            productCategory: productCategory,
+            productName: productName,
+            productSKU: name,
+            productPrice: 'Unknown',
+            images: images,
+            overview: overview,
+            brochure: brochure
+        }
+
+        // write data to file 
+        fs.writeFileSync(`./data/${self.dataSource}/JSON/${name}.json`, JSON.stringify(metadata))
+
+        // save JSON to GCP 
+        COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${name}.json`, JSON.stringify(metadata))
+
+        // save images to GCP
+        for (var i = 0; i < images.length; i++) {
+            COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, `${self.dataSource}/images/${name}/${name} ${i}`)
+            .then(res => {
+            console.log(`📸 `, res);
+            })
+            .catch(err => {
+            console.log(`Image error`, err);
+            });
+        }
+
+        // PDF of specs content
+        await page.goto(url + 'specifications/')
+        let content = await page.content()
+
+        let specsContent = await page.evaluate(() => document.querySelector('div.elementor-section-wrap').innerHTML);
+        let fileName = productName
+
+        // save specs html to GCP 
+        COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+
+        pipeline(
+            fs.writeFileSync(`./data/${self.dataSource}/HTML/${fileName}.html`, specsContent),
+            await self.generatePDF(fileName),
+            console.log(chalk.green(`😀 Finished scraping ${url} 😀`))
+        )
+
+    },
+
+    scrapeAccessoryPage: async (page) => { 
+        var [ url, sku, dateScraped, productCategory, 
+            productSubCategory, productName, compatibility, 
+            images, overview, brochure ] = ''
+        
+        try {
+            url = await page.url()
+            
+             // sku is not found, but I figured I would at least record the ID
+            sku = url.split('/')
+            sku = sku[sku.length - 2]
+    
+            var productName = ''
+    
+            console.log(chalk.bgMagenta(`Scraping ${url}`))
+            
+            productCategory = 'Accessories'
+            productSubCategory = await page.$eval('p.ttl_category', el => el.innerText) 
+    
+            productName = await page.$eval('h1.elementor-heading-title', el=> el.innerText)
+    
+            image = await page.$eval('.lae-image', el => el.src)
+            images = [] 
+            images.push(image)
+    
+            overview = await page.$$eval('div.elementor-text-editor', el => { 
+                overview = el.map(el => el.innerText)
+                return overview
+            })
+    
+            dateScraped = new Date().toISOString().slice(0, 10)
+    
+            brochure = await page.$$eval('a', links => {
+                links = links.map(el => el.href)
+                brochure = links.filter(link => link.includes('.pdf'))
+                return brochure
+            })
+    
+            compatibilityArr = await page.$$eval('div.elementor-widget-container', el => { 
+                compatibility = el.map(el => el.innerText)
+                return compatibility
+            })
+
+            let nc = []
+            for (var i = 0; i < compatibilityArr.length; i++) { 
+                if (compatibilityArr[i] != '') { 
+                    nc.push(compatibilityArr[i])
+                }
+            }
+
+            var index = nc.findIndex(el => el.includes('Compatibility'));
+
+            var compatibilityStr = nc[index + 1]
+    
+            compatibilityArr = compatibilityStr.split('/')
+            compatibility = []
+    
+            for (var i = 0; i < compatibilityArr.length; i++) { 
+                var result = compatibilityArr[i].split(' ').join('');
+                compatibility.push(result)
+            }
+
+            
+        } catch (error) {
+            console.log(error)
+        } finally { 
+            const metadata = { 
+                dataSource: 'Fuji',
+                dateScraped: dateScraped,
+                url: url,
+                productCategory: productCategory,
+                productSubCategory: productSubCategory,
+                productName: productName,
+                productSKU: sku,
+                productPrice: 'Unknown',
+                compatibility: compatibility,
+                images: images,
+                overview: overview,
+                brochure: brochure
+            }
+
+            // console.log(metadata)
+
+            // write data to file 
+            fs.writeFileSync(`./data/${self.dataSource}/JSON/${productName}.json`, JSON.stringify(metadata))
+
+            // save JSON to GCP 
+            COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${productName}.json`, JSON.stringify(metadata))
+
+            // save images to GCP
+            for (var i = 0; i < images.length; i++) {
+                COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, `${self.dataSource}/images/${productName}/${productName} ${i}`)
+                .then(res => {
+                console.log(`📸 `, res);
+                })
+                .catch(err => {
+                console.log(`Image error`, err);
+                });
+            }
+
+            console.log(chalk.green(`😀 Finished scraping ${url} 😀`))
+        }
     },
 
     generatePDF: async function(fileName) { 
@@ -262,12 +473,23 @@ const self = {
         this list just for testing purposes, we can expand to all of the links
         generated in the previous function
         */
-        const urls = [
-            "https://fujifilm-x.com/global/products/cameras/gfx100/",
-            "https://fujifilm-x.com/global/products/cameras/gfx100s/",
-            "https://fujifilm-x.com/global/products/cameras/gfx-50s/",
-            "https://fujifilm-x.com/global/products/cameras/gfx-50r/"
-        ]
+        // const urls = [
+        //     "https://fujifilm-x.com/global/products/cameras/gfx100/",
+        //     "https://fujifilm-x.com/global/products/cameras/gfx100s/",
+        //     "https://fujifilm-x.com/global/products/cameras/gfx-50s/",
+        //     "https://fujifilm-x.com/global/products/cameras/gfx-50r/",
+        //     'https://fujifilm-x.com/global/products/lenses/gf23mmf4-r-lm-wr/',
+        //     "https://fujifilm-x.com/global/products/lenses/xf56mmf12-r/",
+        //     "https://fujifilm-x.com/global/products/lenses/xf56mmf12-r-apd/",
+        //     "https://fujifilm-x.com/global/products/lenses/xf60mmf24-r-macro/",
+        //     "https://fujifilm-x.com/global/products/accessories/wcl-x100ii/",
+        //     "https://fujifilm-x.com/global/products/accessories/lhcp-001/",
+        //     "https://fujifilm-x.com/global/products/accessories/lhcp-002/",
+        //     "https://fujifilm-x.com/global/products/accessories/lhcp-27/",
+        //     "https://fujifilm-x.com/global/products/accessories/rlcp-001/",
+        // ]
+
+        let urls = self.productLinks
 
         const cluster = await Cluster.launch({
             concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -276,7 +498,14 @@ const self = {
 
         await cluster.task(async ({ page, data: url }) => {
             await page.goto(url);
-            await self.scrapePage(page);
+            // need different scrapers for each type of page
+            if (url.includes('/cameras/')) { 
+                await self.scrapeCameraPage(page)
+            } else if (url.includes('/lenses/')) { 
+                await self.scrapeLensePage(page)
+            } else if (url.includes('/accessories/')) { // accessories
+                await self.scrapeAccessoryPage(page)
+            } else {}
             
         });
 
@@ -294,7 +523,7 @@ const self = {
     */
     app: async () => {
         try {
-            var tasks = [self.cluster]
+            var tasks = [self.loopThroughURLS, self.cluster]
             for (const fn of tasks) {
                 await fn()
             }
