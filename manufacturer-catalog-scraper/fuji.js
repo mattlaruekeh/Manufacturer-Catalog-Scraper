@@ -393,9 +393,9 @@ const self = {
         } catch (error) {
             console.log(error)
         } finally { 
-            const metadata = { 
+            const metadata = {
+                dateScraped: dateScraped, 
                 dataSource: 'Fuji',
-                dateScraped: dateScraped,
                 url: url,
                 productCategory: productCategory,
                 productSubCategory: productSubCategory,
