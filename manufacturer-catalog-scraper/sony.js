@@ -108,6 +108,10 @@ const self = {
         })
     },
 
+    /* 
+        Function to scroll the page so that we can load in the dynamic content
+        source: https://stackoverflow.com/questions/51529332/puppeteer-scroll-down-until-you-cant-anymore
+    */
     autoScroll: async (page) => {
         await page.evaluate(async () => {
             await new Promise((resolve, reject) => {

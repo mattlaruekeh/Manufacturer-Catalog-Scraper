@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const { Storage } = require('@google-cloud/storage'); 
 const axios =  require('axios');
+const chalk = require('chalk');
 
 const self =  {
     cheerio: require('cheerio'),
@@ -31,10 +32,10 @@ const self =  {
 
         if (format == 'pdf') { 
             await file.save(data).then(() => 
-                console.log(`Uploaded file ${fileName} to ${bucketName}`))
+                console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
         } else { 
             await file.save(JSON.stringify(data)).then(() => 
-                console.log(`Uploaded file ${fileName} to ${bucketName}`))
+                console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
         }
         
     },
@@ -42,7 +43,7 @@ const self =  {
     processAndSaveImageToGCP: async function(imageURL, bucketName, fileName) { 
         return new Promise((resolve, reject) => {
             
-            console.log(`Processing image ${imageURL}`)
+            // console.log(`Processing image ${imageURL}`)
             // create GCP storage client
             const storage = new Storage({
                 projectId: self.DEV_PROJECT_ID,
@@ -78,7 +79,7 @@ const self =  {
                     reject(error) 
                 })
                 .on('finish', () => { 
-                    resolve(true)
+                    resolve(imageURL)
                 });
             })
             .catch(err => {

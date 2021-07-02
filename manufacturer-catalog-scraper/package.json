@@ -11,14 +11,16 @@
   "dependencies": {
     "@google-cloud/storage": "^5.8.5",
     "axios": "^0.21.1",
+    "bluebird": "^3.7.2",
     "chalk": "^4.1.1",
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^10.0.0",
     "fs": "^0.0.1-security",
     "jsdom": "^16.6.0",
     "promise-request-retry": "^1.0.2",
-    "puppeteer": "^10.0.0",
+    "puppeteer": "^10.1.0",
     "puppeteer-autoscroll-down": "^0.1.7",
+    "puppeteer-cluster": "^0.22.0",
     "querystring": "^0.2.1",
     "sharp": "^0.28.3"
   }
