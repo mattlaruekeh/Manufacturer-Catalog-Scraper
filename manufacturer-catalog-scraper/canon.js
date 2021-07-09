@@ -317,6 +317,7 @@ const self = {
                         compatibility.push(compatibilityArr[0][i].replace('\n', ''))
                     }
                 }
+                compatibility = compatibility.filter(item => !(item.includes('Disclaimer')))
             }
 
 
