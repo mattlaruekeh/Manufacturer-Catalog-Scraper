@@ -42,14 +42,18 @@ const self =  {
 
         const bucket = storage.bucket(bucketName);    
         const file = bucket.file(fullPath)
-
-        if (format == 'pdf') { 
-            await file.save(data).then(() => 
-                console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
-        } else { 
-            await file.save(JSON.stringify(data)).then(() => 
-                console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
+        try {
+            if (format == 'pdf') { 
+                await file.save(data).then(() => 
+                    console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
+            } else { 
+                await file.save(JSON.stringify(data)).then(() => 
+                    console.log(`⬆️  Uploaded file ${fileName} to ${bucketName} ⬆️`))
+            }
+        } catch (error) {
+            console.log(`Error saving file ${fileName} to ${bucketName}: ${error}`)
         }
+        
         
     },
     
@@ -95,14 +99,14 @@ const self =  {
                         'Cache-Control': 'public, max-age=31536000'}
                 }))
                 .on('error', (error) => { 
-                    reject(error) 
+                    reject(`Image transfer error for ${url}`, error);
                 })
                 .on('finish', () => { 
                     resolve(imageURL)
                 });
             })
             .catch(err => {
-                reject("Image transfer error. ", err);
+                reject(`Image transfer error for ${url}`, err);
             });
         })
     },
