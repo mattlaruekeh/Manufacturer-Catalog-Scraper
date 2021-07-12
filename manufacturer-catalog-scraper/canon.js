@@ -1,18 +1,18 @@
 /* 
     Load in common functions and variables
 */
+
 const COMMON = require('./common');
 const puppeteer = COMMON.puppeteer
 const cheerio = COMMON.cheerio
 const chalk = COMMON.chalk
 const fs = COMMON.fs
 const jsdom = COMMON.jsdom
-const { JSDOM } = jsdom
+const { JSDOM } = jsdom;
 const axios = COMMON.axios
-const sharp = COMMON.sharp
-const { Storage } = require('@google-cloud/storage');
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
 const DEV_BUCKET = COMMON.DEV_BUCKET
+const PROD_BUCKET = COMMON.PROD_BUCKET
 const DEV_PROJECT_ID = COMMON.DEV_PROJECT_ID
 const DEV_PROJECT_KEY = COMMON.DEV_PROJECT_KEY
 const { ConcurrencyManager } = require("axios-concurrency");
@@ -22,7 +22,34 @@ const {
 } = require('perf_hooks');
 const { Cluster } = require('puppeteer-cluster');
 const { pipeline } = require('stream');
+const path = require('path');
+const { error } = require('console');
 
+
+/* Log errors to local file */
+
+const log = `./logs`;
+if (!fs.existsSync(log)) {
+    fs.mkdirSync(log, {
+        recursive: true
+    });
+}
+
+var date = new Date().toISOString().slice(0, 10);
+const util = require('util');
+// var log_file = fs.createWriteStream(__dirname + `/logs/${date}_debug.log`, {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+//   log_file.appendFile(util.format(d) + '\n');
+  log_stdout.write(util.format(d) + '\n');
+};
+
+
+
+/* 
+    Start of main functions
+*/
 
 const self = {
     dataSource: 'Canon',
@@ -105,7 +132,7 @@ const self = {
                 'https://shop.usa.canon.com/shop/en/catalog/professional-camcorders-video-cameras',
             ]
             // replace with self.baseURLS
-            Promise.all(testURLS.map(url => api.get('https://app.scrapingbee.com/api/v1', {
+            Promise.all(self.baseURLS.map(url => api.get('https://app.scrapingbee.com/api/v1', {
                 params: {
                     'api_key': SCRAPINGBEE,
                     'url': url,
@@ -121,24 +148,38 @@ const self = {
                 }
                 products = products.flat()
                 self.productLinks.push(products)
-                self.productLinks.flat()
+                self.productLinks = self.productLinks.flat()
 
-                // write links to file 
-                let filename = `${self.dataSource}/productURLS/${self.dateScraped}_${self.dataSource}_product_links.json`
-                fs.writeFileSync(`./data/${filename}`, JSON.stringify(self.productLinks))
+                // write links to file
+                let path = `${self.dataSource}/productURLS/${self.dateScraped}/${self.dateScraped}_${self.dataSource}_product_links.json`
+                let content = self.productLinks
 
+                console.log(content)
+
+                const links = `./data/${self.dataSource}/productURLS/${self.dateScraped}`;
+                if (!fs.existsSync(links)) {
+                    fs.mkdirSync(links, {
+                        recursive: true
+                    });
+                }
+                fs.writeFileSync(`./data/${path}`, JSON.stringify(content))
+            
                 // write to GCP
-                self.saveToGCP(DEV_BUCKET, filename, self.productLinks)
+                /* COMMON.saveToGCP(DEV_BUCKET, path, content) */
+                COMMON.saveToGCP(PROD_BUCKET, path, content)
 
                 console.log(chalk.green(`✅ Finished getting product links ✅`))
                 self.measurePerfomance(1) // measure task 1
+
+                manager.detach()
+                return resolve(self.productLinks)
+
             }).catch(err => {
                 console.log(err)
+                manager.detach()
                 return reject(err)
             })
-            manager.detach()
-
-            return resolve('Finished')
+            
         })
 
     },
@@ -147,7 +188,16 @@ const self = {
         CLUSTER: Run cluster of puppeteer scraping tasks concurrently
     */
 
-    cluster: async () => {
+    runCluster: async () => {
+        let promises = []
+        let promise = await self.getProductLinks()
+        promises.push(promise)
+        Promise.allSettled(promises).then(result => {
+            self.cluster(result)
+        })
+    },
+
+    cluster: async (promise) => {
         console.log(chalk.green('🚀 Running cluster 🚀'))
 
         let prefix = 'https://shop.usa.canon.com'
@@ -167,11 +217,35 @@ const self = {
             "https://shop.usa.canon.com/shop/en/catalog/shoulder-strap-ss-650",
         ]
 
+        var arr = promise[0].value
+
+        var urls = []
+
+        for (var i = 0; i < arr.length; i++) {
+            const result = prefix + arr[i]
+            urls.push(result)
+        }
+
+        let browserArgs = [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu',
+            '--incognito',  
+        ]
+
         const cluster = await Cluster.launch({
             concurrency: Cluster.CONCURRENCY_CONTEXT,
             maxConcurrency: 4,
             monitor: true,
-            timeout: 500000
+            timeout: 500000,
+            puppeteerOptions: {
+                args: browserArgs,
+                ignoreHTTPSErrors: true,
+            },
         });
 
         await cluster.task(async ({ page, data: url }) => {
@@ -181,7 +255,7 @@ const self = {
             //if the page makes a  request to a resource type of image or stylesheet then abort that request
             page.on('request', request => {
                 // to block stylesheets as well add request.resourceType() === 'stylesheet'
-                if (request.resourceType() === 'image')
+                if (request.resourceType() === 'image' || request.resourceType() === 'stylesheet')
                     request.abort();
                 else
                     request.continue();
@@ -192,13 +266,18 @@ const self = {
             await self.scrape(page)
         });
 
-        for (var i = 0; i < testURLS.length; i++) {
+        /* for (var i = 0; i < testURLS.length; i++) {
             cluster.queue(testURLS[i]);
+        } */
+
+        for (var i = 0; i < urls.length; i++) {
+            cluster.queue(urls[i])
         }
 
         // close cluster once all the tasks are finished 
         await cluster.idle();
         await cluster.close();
+        await self.measurePerfomance(2)
     },
 
     scrape: async (page) => {
@@ -216,6 +295,8 @@ const self = {
             let $ = cheerio.load(content);
 
             productName = $('span[itemprop=name]').text()
+            productName = productName.split('/').join('');
+            productName = productName.trim();
 
             productCategory = $('#widget_breadcrumb > ul').text().trim().split('\\\n')[1]
 
@@ -230,7 +311,7 @@ const self = {
             })
 
 
-            let overview = await page.$$eval('#tab1Widget > div.content p', texts => {
+            overview = await page.$$eval('#tab1Widget > div.content p', texts => {
                 texts = texts.map(el => el.innerText.trim())
                 return texts
             })
@@ -275,31 +356,35 @@ const self = {
                 */
 
                 const tab3 = await page.$('div#tab3')
-                await tab3.click()
-                let content = await page.content()
 
-                let specsContent = $('div[aria-labelledby=tab3]').html()
-                let fileName = `${self.dateScraped}_${self.dataSource}_${productName}_specs`
+                if (tab3) { 
+                    await tab3.click()
+                    let content = await page.content()
 
-                // save specs html to GCP 
-                COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+                    let specsContent = $('div[aria-labelledby=tab3]').html()
+                    let fileName = `${self.dateScraped}_${productSKU}_${productName}_specs`
 
-                const dir = `./data/${self.dataSource}/HTML`;
-                if (!fs.existsSync(dir)) {
-                    fs.mkdirSync(dir, {
-                        recursive: true
-                    });
+                    // save specs html to GCP 
+                    // COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+                    COMMON.saveToGCP(PROD_BUCKET, `${self.dataSource}/HTML/${self.dateScraped}/${fileName}.html`, specsContent)
+
+                    const dir = `./data/${self.dataSource}/HTML`;
+                    if (!fs.existsSync(dir)) {
+                        fs.mkdirSync(dir, {
+                            recursive: true
+                        });
+                    }
+
+                    fs.writeFileSync(`./data/${self.dataSource}/HTML/${fileName}.html`, specsContent, 
+                        function(err, result) {
+                            if(err) { 
+                                console.log('Error writing file', err);
+                            }
+                        }   
+                    )
+
+                    await COMMON.generatePDF(self.dataSource, fileName)
                 }
-
-                fs.writeFileSync(`./data/${self.dataSource}/HTML/${fileName}.html`, specsContent, 
-                    function(err, result) {
-                        if(err) { 
-                            console.log('Error writing file', err);
-                        }
-                    }   
-                )
-
-                await self.generatePDF(fileName)
 
             } else { // accessory product
                 const tab4 = await page.$('div#tab4')
@@ -320,7 +405,6 @@ const self = {
                 compatibility = compatibility.filter(item => !(item.includes('Disclaimer')))
             }
 
-
             const metadata = {
                 dateScraped: self.dateScraped,
                 dataSource: self.dataSource,
@@ -335,27 +419,37 @@ const self = {
                 compatibility: compatibility
             }
 
-            console.log(metadata)
+            // console.log(metadata)
 
+            let path = `${self.dataSource}/JSON/${self.dateScraped}/${self.dateScraped}_${productSKU}_${productName}.json`;
 
-            let jsonFile = `${self.dataSource}/JSON/${productName}/${self.dateScraped}_${productName}_scraped_data.json`
+            const jsonPath = `./data/${self.dataSource}/JSON/${self.dateScraped}`;
+            if (!fs.existsSync(jsonPath)) {
+                fs.mkdirSync(jsonPath, {
+                    recursive: true
+                });
+            }
 
-            // write data to file 
-            // fs.writeFileSync(`./data/${jsonFile}`, JSON.stringify(metadata))
-
-            // save JSON to GCP 
-            self.saveToGCP(DEV_BUCKET, jsonFile, metadata)
+            /* COMMON.saveToGCP(DEV_BUCKET, path, metadata) */
+            COMMON.saveToGCP(PROD_BUCKET, path, metadata)
+            fs.writeFileSync(`./data/${path}`, JSON.stringify(metadata))
 
             let promises = []
             // save image to GCP 
             for (var i = 0; i < images.length; i++) {
                 var imageName = images[i].split('/')
                 imageName = imageName[imageName.length - 1]
-                let imageFilePath = `${self.dataSource}/images/${productName}/${self.dateScraped}/${productName}_${imageName}`
-                let promise = COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, imageFilePath)
-                    .catch(err => {
-                        console.log(`Image error`, err);
-                    });
+                let imageFilePath = `${self.dataSource}/images/${self.dateScraped}/${productName}/${self.dateScraped}_${productSKU}_${productName}_${imageName}`
+                /* 
+                    let promise = COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, imageFilePath)
+                        .catch(err => {
+                            console.log(`Image error`, err);
+                        }); 
+                */
+                let promise = COMMON.processAndSaveImageToGCP(images[i], PROD_BUCKET, imageFilePath)
+                .catch(err => {
+                    console.log(`Image error`, err);
+                });
                 promises.push(promise)
             }
 
@@ -705,14 +799,14 @@ const self = {
     measurePerfomance: async (taskNumber) => {
         var t1 = performance.now()
         let milliseconds = (t1 - self.timeAtTask)
-        let timeTaken = self.msToTime(milliseconds)
+        let timeTaken = COMMON.msToTime(milliseconds)
 
         if (taskNumber == 1) { // getting links
             self.timeTakenForProductLinkTask = timeTaken
             console.log(`Time taken for getting links: ${timeTaken}`)
         } else if (taskNumber == 2) { // scraping page
             self.timeTakenForScrapingTask = timeTaken
-            console.log(`Time taken for scraping: ${timeTaken}`)
+            console.log(`Time taken for scraping ${self.productLinks.length} links: ${timeTaken}`)
         } else { // total time taken 
             console.log(`Total time taken: ${timeTaken}`)
         }
@@ -727,7 +821,7 @@ const self = {
     app: async () => {
         try {
 
-            var tasks = [self.cluster]
+            var tasks = [self.runCluster]
             for (const fn of tasks) {
                 await fn()
             }

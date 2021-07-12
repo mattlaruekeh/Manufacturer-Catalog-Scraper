@@ -433,6 +433,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
+console-log-saver@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/console-log-saver/-/console-log-saver-1.0.2.tgz#86e913aa85deda84962926486419e4878cb35b50"
+  integrity sha512-nLxWfemUd8abw3eJXf1bwmO+tzRjpWtOjBtMUi22M6xj582GYbxc6ezTpLh3CYTRo24ZEKUdWK4JmZ1ZZT8jKQ==
+
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"

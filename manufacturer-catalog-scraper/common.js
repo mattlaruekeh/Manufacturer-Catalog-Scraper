@@ -23,6 +23,7 @@ const self =  {
     PROD_PROJECT_KEY: process.env.PROD_PROJECT_KEY,
     DEV_BUCKET: 'manufacturer-scraper-dev-bucket',
     PROD_BUCKET: 'keh_sandbox',
+    dateScraped: new Date().toISOString().slice(0, 10),
 
     saveToGCP: async(bucketName, fileName, data, format) => { 
 
@@ -150,7 +151,7 @@ const self =  {
             /* 
                 self.saveToGCP(self.DEV_BUCKET, `${dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf') 
             */
-            self.saveToGCP(self.PROD_BUCKET, `${dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
+            self.saveToGCP(self.PROD_BUCKET, `${dataSource}/PDF/${self.dateScraped}/${fileName}.pdf`, pdfBuffer, 'pdf')
 
             await browser.close() 
     
