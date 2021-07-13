@@ -100,14 +100,14 @@ const self =  {
                         'Cache-Control': 'public, max-age=31536000'}
                 }))
                 .on('error', (error) => { 
-                    reject(`Image transfer error for ${url}`, error);
+                    reject(`Image transfer error for ${imageURL}`, error);
                 })
                 .on('finish', () => { 
                     resolve(imageURL)
                 });
             })
             .catch(err => {
-                reject(`Image transfer error for ${url}`, err);
+                reject(`Image transfer error for ${imageURL}`, err);
             });
         })
     },
@@ -123,6 +123,16 @@ const self =  {
         seconds = (seconds < 10) ? "0" + seconds : seconds;
 
         return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+    },
+
+    cleanString: function(input) {
+        var output = "";
+        for (var i=0; i<input.length; i++) {
+            if (input.charCodeAt(i) <= 127) {
+                output += input.charAt(i);
+            }
+        }
+        return output;
     },
 
     generatePDF: async function(dataSource, fileName) { 
