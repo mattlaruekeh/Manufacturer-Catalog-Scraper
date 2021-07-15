@@ -219,6 +219,13 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios-concurrency@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/axios-concurrency/-/axios-concurrency-1.0.4.tgz#b484141eceb56e8b054110c7314fbce6e222f85f"
+  integrity sha512-KDtlv1uWln80fmr6D4aq2je/HAtiMZ6k3nY8uCbQlSQWHznpm2v3aZPlBatPBGUBWuDeFRpMF9aFFpO+xyiW4g==
+  dependencies:
+    axios "^0.21.1"
+
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -425,6 +432,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
+
+console-log-saver@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/console-log-saver/-/console-log-saver-1.0.2.tgz#86e913aa85deda84962926486419e4878cb35b50"
+  integrity sha512-nLxWfemUd8abw3eJXf1bwmO+tzRjpWtOjBtMUi22M6xj582GYbxc6ezTpLh3CYTRo24ZEKUdWK4JmZ1ZZT8jKQ==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"

@@ -11,259 +11,480 @@ const { JSDOM } = jsdom;
 const axios = COMMON.axios
 const SCRAPINGBEE = COMMON.SCRAPINGBEE
 const DEV_BUCKET = COMMON.DEV_BUCKET
+const PROD_BUCKET = COMMON.PROD_BUCKET
 const DEV_PROJECT_ID = COMMON.DEV_PROJECT_ID
 const DEV_PROJECT_KEY = COMMON.DEV_PROJECT_KEY
+const { ConcurrencyManager } = require("axios-concurrency");
+const {
+    performance,
+    PerformanceObserver
+} = require('perf_hooks');
+const { Cluster } = require('puppeteer-cluster');
+const { pipeline } = require('stream');
+const path = require('path');
+const { error } = require('console');
 
 const self = {
     dataSource: 'Nikon',
+    dateScraped: new Date().toISOString().slice(0, 10),
+    timeAtStart: performance.now(),
+    timeAtTask: performance.now(),
+    timeTakenForProductLinkTask: null,
+    timeTakenForScrapingTask: null,
     productLinks: [],
     browser: null,
     page: null,
     content: null,
-    url: 'https://www.nikonusa.com/en/nikon-products/dslr-cameras/index.page',
+    baseURLS: [
+        'https://www.nikonusa.com/en/nikon-products/dslr-cameras/index.page',
+        'https://www.nikonusa.com/en/nikon-products/mirrorless-cameras/index.page',
+        'https://www.nikonusa.com/en/nikon-products/compact-digital-cameras/index.page',
+        'https://www.nikonusa.com/en/nikon-products/camera-lenses/dslr-lenses/index.page',
+        'https://www.nikonusa.com/en/nikon-products/camera-lenses/mirrorless-lenses/index.page',
+        'https://www.nikonusa.com/en/nikon-products/binoculars/index.page',
+        'https://www.nikonusa.com/en/nikon-products/rangefinders/index.page',
+        'https://www.nikonusa.com/en/nikon-products/fieldscopes/index.page',
+        'https://www.nikonusa.com/en/nikon-products/flashes/index.page',
+        'https://www.nikonusa.com/en/nikon-products/photography-accessories/mirrorless-lens-accessories.page',
+        'https://www.nikonusa.com/en/nikon-products/photography-accessories/dslr-lens-accessories.page',
+        'https://www.nikonusa.com/en/nikon-products/sport-optics-accessories/binocular-accessories.page',
+        'https://www.nikonusa.com/en/nikon-products/sport-optics-accessories/rangefinder-accessories.page',
+        'https://www.nikonusa.com/en/nikon-products/sport-optics-accessories/fieldscope-accessories.page',
+    ],
 
     /* 
-        Get products from main page for later scraping
+        Loops through all the base category URLS to get the
+        individual product links for later scraping
     */
-    getLinks: async () => {
+
+    getProductLinks: async () => {
+
         return new Promise(async (resolve, reject) => {
-            try {
-                console.log('Getting product links')
-                let res = axios.get('https://app.scrapingbee.com/api/v1', {
-                    params: {
-                        'api_key': SCRAPINGBEE,
-                        'url': self.url,
-                        'render_js': 'false',
-                        'extract_rules': '{ "all_links" : { "selector": "a",  "type": "list", "output": "@href" }}',
+            console.log('⌛ Getting product links ⌛')
+            let api = axios.create({
+            });
+            const MAX_CONCURRENT_REQUESTS = 10;
+            const manager = ConcurrencyManager(api, MAX_CONCURRENT_REQUESTS);
+
+            const testURLS = [
+                'https://www.nikonusa.com/en/nikon-products/dslr-cameras/index.page',
+                'https://www.nikonusa.com/en/nikon-products/photography-accessories/mirrorless-lens-accessories.page',
+            ]
+            // replace with self.baseURLS
+            Promise.all(self.baseURLS.map(url => api.get('https://app.scrapingbee.com/api/v1', {
+                params: {
+                    'api_key': SCRAPINGBEE,
+                    'url': url,
+                    'render_js': 'false',
+                    'extract_rules': '{ "all_links" : { "selector": "a",  "type": "list", "output": "@href" }}',
+                    'wait': 200
+                }
+            }))).then(responses => {
+                let products = []
+                for (var i = 0; i < responses.length; i++) {
+                    let urls = responses[i].data.all_links
+                    products.push(urls)
+                }
+                products = products.flat()
+
+                let edited = []
+                for (var i = 0; i < products.length; i++) {
+                    if (products[i] != null && products[i].includes('/product/')) {
+                        edited.push(products[i])
                     }
-                }).then(function (response) {
-                    // handle success
-                    // Store links in productLinks array for later use
-                    let urls = response.data
+                }
+                edited = edited.flat()
+                self.productLinks.push(edited)
+                self.productLinks.flat()
 
-                    for (var i = 0; i < urls.all_links.length; i++) {
-                        if (urls.all_links[i] && urls.all_links[i].includes('/product/')) {
-                            self.productLinks.push(urls.all_links[i])
-                        }
-                    }
-                    console.log("Got product links")
-                    console.log(self.productLinks)
-                    
-                    // write links to file
-                    fs.writeFileSync(`./data/Nikon/productURLS/${self.dataSource}.json`, JSON.stringify(self.productLinks))
+                // write links to file
+                let path = `${self.dataSource}/productURLS/${self.dateScraped}_${self.dataSource}_product_links.json`
+                let content = self.productLinks
+            
+                // write to GCP
+                /* COMMON.saveToGCP(DEV_BUCKET, path, content) */
+                COMMON.saveToGCP(PROD_BUCKET, path, content)
 
-                    // write to GCP
-                    let filename = `${self.dataSource}/productURLS/${self.dataSource}.json`
-                    COMMON.saveToGCP(DEV_BUCKET, filename, self.productLinks) 
+                console.log(chalk.green(`✅ Finished getting product links ✅`))
+                self.measurePerfomance(1) // measure task 1
 
-                    return resolve(urls)
-                })
+                manager.detach()
+                return resolve(self.productLinks)
 
-            } catch (e) {
-                return reject(e)
-            }
+            }).catch(err => {
+                console.log(err)
+                manager.detach()
+                return reject(err)
+            })
+        })
+
+    },
+
+    runCluster: async () => {
+        let promises = []
+        let promise = await self.getProductLinks()
+        promises.push(promise)
+        Promise.allSettled(promises).then(result => {
+            self.cluster(result)
         })
     },
 
-    /* 
-         Initialize headless browser
-    */
-    initPuppeteer: async () => {
-        console.log("Initializing Puppeteer")
+    cluster: async (promise) => {
+        console.log(chalk.green('🚀 Running cluster 🚀'))
 
-        return new Promise(async (resolve, reject) => {
-            self.browser = await puppeteer.launch({
-                headless: true,
-                args: [`--window-size=${1920},${1080}`]
-            })
-            self.page = await self.browser.newPage();
+        let prefix = 'https://www.nikonusa.com'
 
-            await self.page.setViewport({
-                width: 1920,
-                height: 1080
-            })
+        let testURLS = [
+            "/en/nikon-products/product/dslr-cameras/d3500.html",
+            "/en/nikon-products/product/dslr-cameras/d850.html",
+            "/en/nikon-products/product/dslr-cameras/d7500.html",
+            "/en/nikon-products/product/lens-hoods/hb-96-lens-hood.html",
+            "/en/nikon-products/product/lens-hoods/hb-94-lens-hood.html",
+            "/en/nikon-products/product/lens-caps/lc-52b-snap-on-front-lens-cap.html",
+            "/en/nikon-products/product/lens-hoods/hb-98-bayonet-lens-hood.html"
+        ]
 
+        /* 
+            Add prefix to dev URLS
+            for (var i = 0; i < testURLS.length; i++) {
+                testURLS[i] = prefix + testURLS[i]
+            }
+        */
+
+        // get array value from promise
+        var arr = promise[0].value[0]
+
+        var urls = []
+
+        for (var i = 0; i < arr.length; i++) {
+            const result = prefix + arr[i]
+            urls.push(result)
+        }
+
+        // console.log(urls)
+        let browserArgs = [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu',
+            '--incognito',  
+        ]
+
+        const cluster = await Cluster.launch({
+            concurrency: Cluster.CONCURRENCY_CONTEXT,
+            maxConcurrency: 3,
+            // monitor: true,
+            timeout: 500000,
+            puppeteerOptions: {
+                args: browserArgs,
+                ignoreHTTPSErrors: true,
+            },
+        });
+
+        await cluster.task(async ({ page, data: url }) => {
             //turns request interceptor on
-            await self.page.setRequestInterception(true);
+            await page.setRequestInterception(true);
 
             //if the page makes a  request to a resource type of image or stylesheet then abort that request
-            self.page.on('request', request => {
+            page.on('request', request => {
                 // to block stylesheets as well add request.resourceType() === 'stylesheet'
-                if (request.resourceType() === 'image')
+                if (request.resourceType() === 'image' || request.resourceType() === 'stylesheet')
                     request.abort();
                 else
                     request.continue();
             });
 
-            if (self.page) {
-                return resolve(self.page)
-            } else {
-                return reject('Could not load page')
-            }
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 0 });
+            await self.scrape(page)
+        });
 
-        }) // end promise
+        /* 
+            Run on dev URLS: 
+            for (var i = 0; i < testURLS.length; i++) {
+                cluster.queue(testURLS[i]);
+            }
+        */
+
+        /* 
+            for (var i = 0; i < 10; i++) {
+                cluster.queue(urls[i])
+            } 
+        */
+
+        
+            for (var i = 0; i < urls.length; i++) {
+                cluster.queue(urls[i])
+            }
+       
+
+        // close cluster once all the tasks are finished 
+        await cluster.idle();
+        await cluster.close();
+        await self.measurePerfomance(2) // measure task 2
+
     },
 
-    scrapePage: async () => {
+    scrape: async (page) => {
 
+        var [url, productName, productCategory,
+            productName, productSKU, productPrice, compatibility,
+            images, overview, features] = ''
 
-        return new Promise(async (resolve, reject) => {
-            try {
-                await self.initPuppeteer();
-                /* 
-                    currently set to go to the first product, need to make
-                    this an array to loop through all of the products
-                */
-                let goTo = 'https://www.nikonusa.com' + self.productLinks[0]
-                console.log(`Going to individual product page ${goTo}`)
+        try {
+            url = await page.url()
 
-                if (self.browser) {
-                    await self.page.goto(goTo, {
-                        waitUntil: 'domcontentloaded',
-                        timeout: 0 // don't timeout request
-                    })
+            /* 
+                Categories: 
+                dslr-cameras
+                mirrorless-cameras
+                camera-lenses
+                lens-hoods
+                lens-filters
+                lens-caps
+                lens-cleaner
+                flashes 
+                compact-digital-cameras
+                mirrorless-lenses
+                binoculars
+                rangefinders
+                fieldscopes
+                lens-case
+                apparel
+                flash-adapters
+                miscellaneous
+                straps
+                cases
+                tripod-adaptors
+                tripods
 
-                    self.content = await self.page.content();
-                    let $ = cheerio.load(self.content)
-                    let html = $.html()
-                    global.document = new JSDOM(html).window.document;
-                    let url = self.page.url()
-                    let title = await self.page.title()
+            */
 
-                    // let's start parsing! 
+            // assign product category based on url
+            if (url.includes('dslr-cameras')) {
+                productCategory = 'DSLR Cameras'
+            } else if (url.includes('mirrorless-cameras')) {
+                productCategory = 'Mirrorless Cameras'
+            } else if (url.includes('camera-lenses')) {
+                productCategory = 'Camera Lenses'
+            } else if (url.includes('lens-hoods')) {
+                productCategory = 'Lens Hoods'
+            } else if (url.includes('lens-filters')) {
+                productCategory = 'Lens Filters'
+            } else if (url.includes('lens-caps')) {
+                productCategory = 'Lens Caps'
+            } else if (url.includes('lens-cleaner')) {
+                productCategory = 'Lens Cleaner'
+            } else if (url.includes('flashes')) {
+                productCategory = 'Flashes'
+            } else if (url.includes('compact-digital-cameras')) {
+                productCategory = 'Compact Digital Camera'
+            } else if (url.includes('mirrorless-lenses')) {
+                productCategory = 'Mirrorless Lens'
+            } else if (url.includes('binoculars')) {
+                productCategory = 'Binoculars'
+            } else if (url.includes('rangefinders')) {
+                productCategory = 'Rangefinders'
+            } else if (url.includes('fieldscopes')) {
+                productCategory = 'Fieldscopes'
+            } else if (url.includes('lens-case')) {
+                productCategory = 'Lens Case'
+            } else if (url.includes('apparel')) {
+                productCategory = 'Apparel'
+            } else if (url.includes('flash-adapters')) {
+                productCategory = 'Flash Adapters'
+            } else if (url.includes('miscellaneous')) {
+                productCategory = 'Misc'
+            } else if (url.includes('straps')) {
+                productCategory = 'Straps'
+            } else if (url.includes('cases')) {
+                productCategory = 'Cases'
+            } else if (url.includes('tripod-adaptors')) {
+                productCategory = 'Tripod Adaptors'
+            } else if (url.includes('tripods')) {
+                productCategory = 'Tripods'
+            } else { 
+                productCategory = 'Unknown'
+            }
 
-                    /* 
-                        What we want: 
-                        - Date Scraped 
-                        - Camera Name 
-                        - SKU 
-                        - Price 
-                        - Images 
-                        - Overview 
-                        - Features 
-                        - Specifications 
-                    */
-                    let dateScraped = new Date().toISOString().slice(0, 10)
+            let title = await page.title()
+            let prodTitle = title.split('|')[0]
 
-                    // luckily a lot of the information we want is already in a json format on the website
+            console.log((`Scraping ${prodTitle}`))
 
-                    let arr = document.querySelectorAll('script[type="application/ld+json"]')
+            let content = await page.content();
+            let $ = cheerio.load(content);
 
-                    /* 
-                        fix weird case for some product where first json doesn't have all images,
-                        may have to get images another way 
-                    */
-                    var jsonObj
-                    if (arr.length == 3) {
-                        jsonObj = JSON.parse(JSON.stringify(arr[1].innerHTML))
-                    } else {
-                        jsonObj = JSON.parse(JSON.stringify(arr[0].innerHTML))
-                    }
+            let html = $.html()
+            global.document = new JSDOM(html).window.document;
 
-                    let json = self.readJSON(jsonObj)
-                    
-                    const metadata = {
-                        dateScraped: dateScraped,
-                        dataSource: self.dataSource,
-                        url: url,
-                        productName: json.name,
-                        productSKU: json.sku,
-                        productPrice: json.price,
-                        images: json.images,
-                        overview: json.description,
-                        gtin12: json.gtin12
-                    }
+            // luckily a lot of the information we want is already in a json format on the website
 
-                    console.log(metadata)
+            let arr = document.querySelectorAll('script[type="application/ld+json"]')
 
-                    /* 
-                        Generate PDF of specs
-                    */
+            features = await page.$$eval('div.nkn-resp-pdp-description', texts => {
+                texts = texts.map(el => el.innerText.trim())
+                return texts
+            })
 
-                    let specsContent = $('div.full-specs').html()
-                    let prodTitle = title.split('|')[0]
+            images = await page.$$eval(("#pdp-hero-carousel > ol > li > div > img"), images => {
+                // get the image source 
+                images = images.map(el => el.src)
+                return images
+            })
 
-                    // save images to GCP
-                    let images = metadata.images
-                    for (var i = 0; i < images.length; i++) {
-                        COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, `${self.dataSource}/images/${prodTitle}/${prodTitle} ${i}`)
-                        .then(res => {
-                        console.log(`Image saved`, res);
-                        })
-                        .catch(err => {
-                        console.log(`Image error`, err);
+            compatibilitySelector = '#tab-ProductDetail-ProductTabs-CompatibleWith span.product-name'
+
+            compatibility = await page.$$eval(compatibilitySelector, products => {
+                products = products.map(el => el.textContent)
+                return products
+            })
+
+            /* 
+                fix weird case for some product where first json doesn't have all images,
+                may have to get images another way 
+            */
+            var jsonObj
+            if (arr.length == 3) {
+                jsonObj = JSON.parse(JSON.stringify(arr[1].innerHTML))
+            } else {
+                jsonObj = JSON.parse(JSON.stringify(arr[0].innerHTML))
+            }
+
+            let json = self.readJSON(jsonObj)
+
+            productName = json.name
+            productSKU = json.sku
+            productPrice = json.price
+            overview = json.description
+
+            // remove extraneous chars from product name
+            productName = productName.replaceAll('/','')
+
+            const metadata = {
+                dateScraped: self.dateScraped,
+                dataSource: self.dataSource,
+                url: url,
+                productName: productName,
+                productCategory: productCategory,
+                productSKU: productSKU,
+                productPrice: productPrice,
+                images: images,
+                overview: overview,
+                features: features,
+                compatibility: compatibility,
+                gtin12: json.gtin12
+            }
+
+            // console.log(metadata)
+
+            let path = `${self.dataSource}/JSON/${self.dateScraped}_${self.dataSource}_${productName}.json`;
+            /* COMMON.saveToGCP(DEV_BUCKET, path, metadata) */
+            COMMON.saveToGCP(PROD_BUCKET, path, metadata)
+
+            const element = document.querySelector('div.full-specs');
+            if (element) { 
+                let specsContent = $('div.full-specs').html()
+                let fileName = `${self.dateScraped}_${self.dataSource}_${productName}_specs`
+    
+                if (specsContent != null) {
+                    // save specs html to GCP 
+                    /* COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent) */
+                    COMMON.saveToGCP(PROD_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
+    
+                    const dir = `./data/${self.dataSource}/HTML`;
+                    if (!fs.existsSync(dir)) {
+                        fs.mkdirSync(dir, {
+                            recursive: true
                         });
                     }
-
-                    let fileName = `${prodTitle}Specs`
-                    fs.writeFileSync(`./data/Nikon/TXT/${fileName}.txt`, specsContent)
-
-                    // save to GCP 
-                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/HTML/${fileName}.html`, specsContent)
-
-                    try { 
-                        console.log("Printing specs content to PDF")
-                        let data = fs.readFileSync(`./data/Nikon/TXT/${fileName}.txt`, "utf-8");
-                        const browser = await puppeteer.launch() 
-                        const page = browser.newPage()
-
-                        await (await page).setContent(data);
-                        await (await page).emulateMediaType('screen');
-                        await (await page).addStyleTag({ path: './css/nikon.css'})
-                        const pdfBuffer = await (await page).pdf({ 
-                            path: `./data/Nikon/PDF/${fileName}.pdf`,
-                            format: 'A4',
-                            printBackground: true,
-                            margin: {top: '35px', left: '35px', right: '35px'}
-                        })
-
-                        // save PDF to GCP 
-                        COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/PDF/${fileName}.pdf`, pdfBuffer, 'pdf')
-                
-                        console.log('Done printing to pdf')
-                        await browser.close() 
-
-                    } catch (e) { 
-                        console.log(e)
-                    }
-
-                    // write data to file 
-                    fs.writeFileSync(`./data/Nikon/JSON/${fileName}.json`, JSON.stringify(metadata))
-
-                    // save JSON to GCP 
-                    COMMON.saveToGCP(DEV_BUCKET, `${self.dataSource}/JSON/${fileName}.json`, metadata)
-
-                    console.log('Done')
-                    await self.browser.close()
-                    return resolve(html)
+    
+                    fs.writeFileSync(`./data/${self.dataSource}/HTML/${fileName}.html`, specsContent, 
+                        function(err, result) {
+                            if(err) { 
+                                console.log('Error writing file', err);
+                            }
+                        }   
+                    )
+    
+                    await COMMON.generatePDF(self.dataSource, fileName)
+    
                 }
-
-            } catch (e) {
-                console.log(e)
-                await self.browser.close()
-                return reject(e)
             }
-        })
+
+            let promises = []
+            for (var i = 0; i < images.length; i++) {
+                var imageName = images[i].split('/')
+                imageName = imageName[imageName.length - 1]
+                let imageFilePath = `${self.dataSource}/images/${productName}/${self.dateScraped}/${productName}_${imageName}`
+                /* let promise = COMMON.processAndSaveImageToGCP(images[i], DEV_BUCKET, imageFilePath)
+                    .catch(err => {
+                        console.log(`Image error`, err);
+                    });
+                promises.push(promise) */
+
+                let promise = COMMON.processAndSaveImageToGCP(images[i], PROD_BUCKET, imageFilePath)
+                    .catch(err => {
+                        console.log(`Image error`, err);
+                    });
+                promises.push(promise)
+            }
+
+            Promise.allSettled(promises).then(
+                console.log(`📷  Images have been uploaded for ${productName} 📷`)
+            )
+
+            console.log(chalk.green(`😀 Finished scraping ${url} 😀`))
+
+        } catch (e) {
+            console.log(e)
+        }
+    },
+
+    measurePerfomance: async (taskNumber) => {
+        var t1 = performance.now()
+        let milliseconds = (t1 - self.timeAtTask)
+        let timeTaken = COMMON.msToTime(milliseconds)
+
+        if (taskNumber == 1) { // getting links
+            self.timeTakenForProductLinkTask = timeTaken
+            console.log(`Time taken for getting links: ${timeTaken}`)
+        } else if (taskNumber == 2) { // scraping page
+            self.timeTakenForScrapingTask = timeTaken
+            console.log(`Time taken for scraping ${self.productLinks.length} links: ${timeTaken}`)
+        } else { // total time taken 
+            console.log(`Total time taken: ${timeTaken}`)
+        }
+
+        // reset timer 
+        self.timeAtTask = performance.now()
     },
 
     readJSON: function (obj) {
         let json = JSON.parse(obj)
 
-        console.log("Found the following keys: ")
-
-        for (key in json) {
-            console.log(key)
-        }
+        /* 
+            console.log("Found the following keys: ")
+            for (key in json) {
+                console.log(key)
+            } 
+        */
 
         let name = json.name
         let description = json.description
         let images = json.image
 
-        console.log(images)
-
         let sku = json.sku
         let gtin12 = json.gtin12
-        let price = json.offers.price
+        
+        // catch price errors
+        var price = ''
+        if (json.offers) { 
+            price = json.offers.price
+        }
+        
 
         return {
             name,
@@ -280,7 +501,7 @@ const self = {
     */
     app: async () => {
         try {
-            var tasks = [self.getLinks, self.scrapePage]
+            var tasks = [self.runCluster]
             for (const fn of tasks) {
                 await fn()
             }
