@@ -120,7 +120,7 @@ const self = {
                 self.productLinks = self.productLinks.filter(item => (item.includes('html')))
 
                 // write links to file
-                let path = `${self.dataSource}/${self.dateScraped}/productURLS/${self.dateScraped}_${self.dataSource}_product_links.json`
+                let path = `${self.dataSource}/productURLS/${self.dateScraped}_${self.dataSource}_product_links.json`
                 let content = self.productLinks
 
                 // console.log(content)
@@ -184,7 +184,7 @@ const self = {
         const cluster = await Cluster.launch({
             concurrency: Cluster.CONCURRENCY_CONTEXT,
             maxConcurrency: 3,
-            // monitor: true,
+            monitor: true,
             timeout: 500000,
             puppeteerOptions: {
                 args: browserArgs,
@@ -211,9 +211,9 @@ const self = {
 
         
             // Run on dev URLS: 
-            for (var i = 0; i < testURLS.length; i++) {
-                cluster.queue(testURLS[i]);
-            }
+            // for (var i = 0; i < testURLS.length; i++) {
+            //     cluster.queue(testURLS[i]);
+            // }
        
 
         /* 
@@ -223,9 +223,9 @@ const self = {
         */
 
         
-            /* for (var i = 0; i < urls.length; i++) {
+            for (var i = 0; i < urls.length; i++) {
                 cluster.queue(urls[i])
-            } */
+            }
        
 
         // close cluster once all the tasks are finished 
@@ -258,6 +258,10 @@ const self = {
             productName = productName.trim();
 
             productSKU = $('span[itemprop=productID]').text()
+
+            // remove extraneous chars from product name and sku
+            productName = productName.replaceAll('/','')
+            productSKU = productSKU.replaceAll('/','')
                     
             productPrice = $('span.price-sales').attr('warrantyprice')
 
@@ -318,7 +322,7 @@ const self = {
                 features: features
             }
 
-            // console.log(metadata)
+            console.log(metadata)
 
             let path = `${self.dataSource}/JSON/${self.dateScraped}/${self.dateScraped}_${productSKU}_${productName}.json`;
             /* COMMON.saveToGCP(DEV_BUCKET, path, metadata) */
